@@ -29,11 +29,9 @@ int main()
 				if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_12) == 1)
 				{
 					flow_led(val_led);
-				}else(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_12) == 0)
-				{
-					mode = CHANGE_LED_BUTTON;
-				}
+				}else mode = CHANGE_LED_BUTTON;
 				break;
+				
 			case CHANGE_LED_BUTTON:
 				if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_12) == 1)
 				{
@@ -46,10 +44,7 @@ int main()
 						GPIO_ResetBits(GPIOA, GPIO_Pin_5);
 						cout = 0;
 					}
-				}else(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_12) == 0)
-				{
-					mode = FLOW_LED; //
-				}
+				}else mode = FLOW_LED; //
 				break;
 		}
 
@@ -76,7 +71,7 @@ void Config_rcc(void) {
 void Config_GPIO(void) {
 	GPIO_InitTypeDef GPIO_InitSTructer;
 	GPIO_InitSTructer.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
-	GPIO_InitSTructer.GPIO_Mode = GPIO_Mode_Out_PD;
+	GPIO_InitSTructer.GPIO_Mode = GPIO_Mode_Out_OD;
 	GPIO_InitSTructer.GPIO_Speed = GPIO_Speed_50MHz;
 	
 	GPIO_Init(GPIOA, &GPIO_InitSTructer);
