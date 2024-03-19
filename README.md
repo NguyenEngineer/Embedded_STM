@@ -1,8 +1,8 @@
-# stm32
-<details><summary> LECTURE 1 : </summary>
+# Embedded STM32
+<details><summary> LESSION 1 : </summary>
   
 </details>
-<details><summary> LECTURE 2 : GPIO </summary>
+<details><summary> LESSION 2 : GPIO </summary>
 
 1 Giới thiệu GPIO.
 
@@ -335,7 +335,7 @@ GPIO_EventOutputConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
 
   
 </details>
-<details><summary> LECTURE 3 : Ngắt và Timer </summary>
+<details><summary> LESSION 3 : Ngắt và Timer </summary>
 
 # 1.Ngắt
 
@@ -450,7 +450,7 @@ Tương tự các ngoại vi khác, cần xác định clock cấp cho timer, c�
 
   
 </details>
-<details><summary> LECTURE 4 : Các chuẩn giao tiếp </summary>
+<details><summary> LESSION 4 : Các chuẩn giao tiếp </summary>
 
 Các MCU truyền nhận dữ liệu với nhau hoặc với các thiết bị  thông qua tín hiệu điện áp. MCU có thể truyền nhận song song, nối tiếp các tín hiệu điện áp này thông quá các chân được cấu hình riêng biệt.
 
