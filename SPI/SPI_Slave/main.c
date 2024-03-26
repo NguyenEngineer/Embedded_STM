@@ -3,11 +3,11 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_tim.h"
 
-#define SPI_GPIO 			GPIOA
+#define SPI_GPIO 	GPIOA
 #define SPI_MISO_Pin 	GPIO_Pin_8
 
 #define SPI_MOSI_Pin 	GPIO_Pin_5
-#define SPI_CS_Pin 		GPIO_Pin_6
+#define SPI_CS_Pin 	GPIO_Pin_6
 #define SPI_SCK_Pin 	GPIO_Pin_7
 
 void Config_rcc(void);
@@ -18,11 +18,6 @@ void SPI_SCK_CLOCK(void);
 uint8_t SPI_Slave_Receive(void);
 
 void delay_ms(uint16_t ms);
-
-
-
-
-//uint8_t DataTrans[7] = {1,3,9,10,15,19,90};
 
 uint8_t Data_Rev;
 int main(void)
@@ -35,9 +30,9 @@ int main(void)
 	
 	while(1)
 	{
-       if(!GPIO_ReadInputDataBit(SPI_GPIO, SPI_CS_Pin)){
-			  Data_Rev = SPI_Slave_Receive();
-		 }
+	     if(!GPIO_ReadInputDataBit(SPI_GPIO, SPI_CS_Pin)){
+		Data_Rev = SPI_Slave_Receive();
+	     }
 	}
 	return 0;
 }
