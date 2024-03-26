@@ -688,6 +688,13 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
                         			return DataValue;
                         	} 
                        }
+  
+- Hàm kiểm tra cờ:   Hàm USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG) trả về trạng thái cờ USART_FLAG tương ứng:
+                          USART_FLAG_TXE: Cờ truyền, set lên 1 nếu quá trình truyền hoàn tất.
+                          USART_FLAG_RXNE: Cờ nhận, set lên 1 nếu quá trình nhận hoàn tất.
+                          USART_FLAG_IDLE: Cờ báo đường truyền đang ở chế độ Idle.
+                          USART_FLAG_PE: Cờ báo lỗi Parity.
+  
 - Cấu hình:         -Struct USART_InitTypeDef:
                  - USART_Mode: Cấu hình chế độ hoạt động cho UART:
                  - USART_Mode_Tx: Cấu hình truyền.
