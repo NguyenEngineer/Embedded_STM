@@ -1,8 +1,7 @@
 # Embedded STM32
-<details><summary> LESSION 1 : </summary>
-  
+
 </details>
-<details><summary> LESSION 2 : GPIO </summary>
+<details><summary> LESSION 1 : GPIO </summary>
 
 1 Giới thiệu GPIO.
 
@@ -335,7 +334,7 @@ GPIO_EventOutputConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
 
   
 </details>
-<details><summary> LESSION 3 : Ngắt và Timer </summary>
+<details><summary> LESSION 2 : Ngắt và Timer </summary>
 
 # 1.Ngắt
 
@@ -450,7 +449,7 @@ Tương tự các ngoại vi khác, cần xác định clock cấp cho timer, c�
 
   
 </details>
-<details><summary> LESSION 4 : Các chuẩn giao tiếp </summary>
+<details><summary> LESSION 3 : Các chuẩn giao tiếp </summary>
 
 Các MCU truyền nhận dữ liệu với nhau hoặc với các thiết bị  thông qua tín hiệu điện áp. MCU có thể truyền nhận song song, nối tiếp các tín hiệu điện áp này thông quá các chân được cấu hình riêng biệt.
 
@@ -618,3 +617,30 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 
   
 </details>
+<details><summary> LESSION 4 : SPI </summary>
+
+</details>
+<details><summary> LESSION 5 : I2C </summary>
+
+</details>
+<details><summary> LESSION 4 : UART </summary>
+
+- Xác định baudrate: Vì uart ko có dây clock nên nó phải thống nhất với thiết bị truyền 1 baudrate nhất định.
+- Baudrate là số đơn vị tín hiệu được truyền trên mỗi đơn vị thời gian cần thiết để biểu diễn các bit đó.
+- Bitrate là số bit (tức là 0 và 1) được truyền trong mỗi đơn vị thời gian.
+                  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/cc1358d3-e800-46ca-ac4d-03e3e1e6e14f)
+
+-  Tính baudrate là trong khoảng thời gian Period đó sẽ xác định là 1 bit (0/1).
+-  VD: baudrate = 9600 thì 1 bit sẽ được xác định trong khoảng 1 bit = 0.104 ms.
+                 ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/482e15c7-68a4-4fd7-9b82-a8e3739db75e)
+
+- Cấu hình:
+                        
+                             void UART_Config(){
+                            	  GPIO_SetBits(UART_GPIO, TX_Pin);   //Baudrate = 9600bits/s >> 0.10467 ms for 1 bit = 104,67 us //=>> time delay ~~105 us
+                            	  delay_us(1);
+                             }
+- Hàm truyền:     - Tạo 1 bit start bằng cách kéo chân RX xuống mức 0, tạo 1 delay để xác nhận 1 bit.
+                  - Truyền 8 bit đi và mỗi bit sẽ được truyền trong khoảng 1 period time.
+                  - Dịch phải mỗi bít đã truyền.
+                  - Truyền bit stop bằng cách: kéo chân RX lên mức 1 trong 1 khoảng period time.
