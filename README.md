@@ -636,11 +636,77 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 
 - Cấu hình:
                         
-                             void UART_Config(){
-                            	  GPIO_SetBits(UART_GPIO, TX_Pin);   //Baudrate = 9600bits/s >> 0.10467 ms for 1 bit = 104,67 us //=>> time delay ~~105 us
-                            	  delay_us(1);
-                             }
+                       void UART_Config(){
+                            GPIO_SetBits(UART_GPIO, TX_Pin);   //Baudrate = 9600bits/s >> 0.10467 ms for 1 bit = 104,67 us //=>> time delay ~~105 us
+                            delay_us(1);
+                       }
 - Hàm truyền:     - Tạo 1 bit start bằng cách kéo chân RX xuống mức 0, tạo 1 delay để xác nhận 1 bit.
                   - Truyền 8 bit đi và mỗi bit sẽ được truyền trong khoảng 1 period time.
                   - Dịch phải mỗi bít đã truyền.
                   - Truyền bit stop bằng cách: kéo chân RX lên mức 1 trong 1 khoảng period time.
+            VD:
+
+                      void UART_Transmit(const char DataValue)
+                    {
+                        	GPIO_WriteBit(UART_GPIO, TX_Pin, Bit_RESET);
+                        	delay_us(BRateTime);
+                        	for ( unsigned char i = 0; i < 8; i++ ){
+                          		if( ((DataValue>>i)&0x1) == 0x1 ){
+                          			GPIO_WriteBit(UART_GPIO, RX_Pin, Bit_SET);
+                          		} else{
+                          			GPIO_WriteBit(UART_GPIO, RX_Pin, Bit_RESET);
+                        		}
+                        	delay_us(BRateTime);
+                    	}
+                    	GPIO_WriteBit(UART_GPIO, TX_Pin, Bit_SET);                     	// Send Stop Bit
+                    	delay_us(BRateTime);
+                    }
+  
+- Hàm nhận:       - Chờ tín hiệu start từ thiết bị gửi ( thiết bị nhận sẽ nhận đc 1 tín hiệu mức 0 để biết bit Start ), tạo 1 delay bằng với period time.
+                  - Sau khi nhận đc bit start thì phải delay thêm (1.5 x period time) để chống nhiễu ( 1 --> 0)
+                  - Đọc 8 bit và mỗi bit sẽ được ghi vào biến lưu.
+                  - Dịch mỗi bit đã nhận.
+                  - Truyền bit stop bằng cách: kéo chân RX lên mức 1 trong 1 khoảng period time.
+          ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/ec85e433-4014-4def-b0d2-03b1caef44da)
+
+            VD:
+
+                      unsigned char UART_Receive(void){
+                        	unsigned char DataValue = 0;
+                        	while(GPIO_ReadInputDataBit(UART_GPIO, RX_Pin) == 1);
+                        	delay_us(BRateTime);
+                        	delay_us(BRateTime/2);
+                        	for ( unsigned char i = 0; i < 8; i++ ){
+                        		if ( GPIO_ReadInputDataBit(UART_GPIO, RX_Pin) == 1 ){
+                        			DataValue += (1<<i);}                               // nếu nhận được bit 1 thì sẽ dịch bit đó sang trái theo thứ tự bit nhận đc và cộng dồn vào biến Datavalue
+                                                                                  // VD:  DataValue có 8 bit 0, bit đầu nhận đc là 1:  for i = 0  dịch (1 << 0) và cộng vào DataValue  0x00 + 0x01 = 0x01 => DataValue = 0x01
+                                                                                           DataValue có bit 0x01, bit thứ 2 nhận đc là 1:  for i = 1  dịch (1 << 1) và cộng vào DataValue  0x01 + 0x02 = 0x03 => DataValue = 0x03
+                        		delay_us(BRateTime);
+                        	}
+                        		if ( GPIO_ReadInputDataBit(UART_GPIO, RX_Pin) == 1 ){
+                        			delay_us(BRateTime/2);
+                        			return DataValue;
+                        	} 
+                       }
+- Cấu hình:         -Struct USART_InitTypeDef:
+                 - USART_Mode: Cấu hình chế độ hoạt động cho UART:
+                 - USART_Mode_Tx: Cấu hình truyền.
+                 - USART_Mode_Rx: Cấu hình nhận.     // Có thể cấu hình cả 2 cùng lúc (song công).
+                 - USART_BaudRate: Cấu hình tốc độ baudrate cho uart.
+                 - USART_HardwareFlowControl: Cấu hình chế độ bắt tay cho uart.
+                 - USART_WordLength: Cấu hình số bit mỗi lần truyền.
+                 - USART_StopBits: Cấu hình số lượng stopbits.
+                 - USART_Parity: cấu hình bit kiểm tra chẳn, lẻ.
+        VD:
+  
+                    void UART_Config(){
+                  		//Usart
+                  	USARTInitStruct.USART_BaudRate = 9600;
+                  	USARTInitStruct.USART_WordLength = USART_WordLength_8b;
+                  	USARTInitStruct.USART_StopBits = USART_StopBits_1;
+                  	USARTInitStruct.USART_Parity = USART_Parity_No;
+                  	USARTInitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+                  	USARTInitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+                  	USART_Init(USART1, &USARTInitStruct);
+                  	USART_Cmd(USART1,ENABLE);
+                  }
