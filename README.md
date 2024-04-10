@@ -717,3 +717,33 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
                   	USART_Init(USART1, &USARTInitStruct);
                   	USART_Cmd(USART1,ENABLE);
                   }
+  
+</details>
+<details><summary> LESSION  :  </summary>
+
+</details>
+<details><summary> LESSION  :  </summary>
+
+</details>
+<details><summary> LESSION  :  </summary>
+
+</details>
+<details><summary> LESSION  :  </summary>
+
+</details>
+<details><summary> LESSION 11 : Flash and Bootloader </summary>
+## Flash
+- Khi mất nguồn toàn bộ dữ liệu đang hoạt động của VDK sẽ mất đi. Nên ta phải lưu vào bộ nhớ Flash và Eprom
+![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/1dce2e76-4bb9-46e8-a215-32b8c84be62d)
+- Flash là bộ nhớ lưu trữ dữ liệu chương trình mà khi mất nguồn thì ko mất dữ liệu. 
+- Eprom là giống flash nhưng là chip mở rộng hơn để lưu trữ.
+![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/16dd9910-1180-40af-af1a-7f0f76ca4a0d)
+- Tùy vào kiến trúc VDK mà kích thướbộ nhớ Flash có thể lưu được.               VD: STM32F103 có 128/64Kb Flash
+- Flash được chia nhỏ ra thành mỗi PAGE, 1 PAGE có kích thước 1KB.              VD: STM32F103 có 128/64Kb Flash -> thì sẽ có 127 page (0 -> 127)
+- Flash phải được xóa đặt về 0 trước khi lưu dữ liệu mới
+![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/a7c40dda-df66-4b59-a9b9-3deb2d5aec0b)
+- Thông thường chương trình sẽ được nạp vào vùng nhớ bắt đầu ở 0x08000000
+- Vùng nhớ phía sau sẽ là trống và người dùng có thể lưu trữ dữ liệu ở vùng này.
+
+
+
