@@ -776,5 +776,35 @@ Qui trình hoạt động của flash
         
         FlagStatus FLASH_GetFlagStatus(uint32_t FLASH_FLAG): hàm này trả về trạng thái của Flag. Ở bài này ta sẽ dùng hàm này để kiểm tra cờ FLASH_FLAG_BSY. Cờ này báo hiệu rằng Flash đang bận (Xóa/Ghi) nếu được set lên 1. 
 
+- Code mẫu các hàm:
+   + Hàm xóa 1 Page flash:
+     
+                void Flash_Erase(uint32_t addresspage){                // truyền vào địa chỉ của 1 page flash
+              	FLASH_Unlock();
+              	while(FLASH_GetFlagStatus(FLASH_FLAG_BSY) == 1);
+              	FLASH_ErasePage(addresspage);
+              	while(FLASH_GetFlagStatus(FLASH_FLAG_BSY) == 1);
+              	FLASH_Lock();}
+
+  + Hàm viết 1 KDL int xuống flash:
+                
+              void Flash_WriteInt(uint32_t address, uint16_t value){
+              	FLASH_Unlock();
+              	while(FLASH_GetFlagStatus(FLASH_FLAG_BSY) == 1);
+              	FLASH_ProgramHalfWord(address, value);
+              	while(FLASH_GetFlagStatus(FLASH_FLAG_BSY) == 1);
+              	FLASH_Lock();}
+  + Hàm viết 2 Byte xuống flash:
+ 
+                void Flash_WriteNumByte(uint32_t address, uint8_t *data, int num){
+                	FLASH_Unlock();
+                	while(FLASH_GetFlagStatus(FLASH_FLAG_BSY) == 1);
+                	uint16_t *ptr = (uint16_t*)data;                   // ép kiểu cho data từ uint8_t thành uint16_t
+                	for(int i=0; i<((num+1)/2); i++){
+                		FLASH_ProgramHalfWord(address+2*i, *ptr);
+                		while(FLASH_GetFlagStatus(FLASH_FLAG_BSY) == 1);
+                		ptr++;
+                	}
+                	FLASH_Lock();}
 
 
