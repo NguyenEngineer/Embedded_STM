@@ -796,7 +796,7 @@ Qui trình hoạt động của flash
               	FLASH_Lock();}
   + Hàm viết 2 Byte xuống flash:
  
-                void Flash_WriteNumByte(uint32_t address, uint8_t *data, int num){
+                void Flash_WriteNumByte(uint32_t address, uint8_t *data, int num){      // num là số lượng data 
                 	FLASH_Unlock();
                 	while(FLASH_GetFlagStatus(FLASH_FLAG_BSY) == 1);
                 	uint16_t *ptr = (uint16_t*)data;                   // ép kiểu cho data từ uint8_t thành uint16_t
@@ -807,4 +807,11 @@ Qui trình hoạt động của flash
                 	}
                 	FLASH_Lock();}
 
+VD: hàm chính
+
+    int main()
+    {
+      uint8_t data[5] = {1,6,7,8,9};
+      Flash_Erase(0x80000000);
+      Flash_WriteNumByte(0x80000000, data, 5); }
 
