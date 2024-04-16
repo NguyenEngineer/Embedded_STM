@@ -746,6 +746,48 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
   + Normal mode: truyền với 1 số lượng data giới hạn đã khai báo trước,khi truyền hết data thì DMA sẽ dừng. Nếu muốn tiếp tục hoạt động thì phải gọi hàm khởi động lại.
   + Cirular mode: truyền với 1 số lượng data đa khai báo sẵn, khi truyền hết data thì sẽ quay lại vị trí đầu mảng đó (ring buffer).
 
+- Cấu hình sử dụng DMA:
+  + Cấu hình CLOCK:
+    * DMA cần được cấp xung từ AHB, cả 2 bộ DMA đều có xung cấp từ AHB. Ngoài ra cần cấp xung cho AFIO.
+
+              void RCC_Config(){
+            	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA| RCC_APB2Periph_SPI1| RCC_APB2Periph_AFIO, ENABLE);
+            	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+            	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);}
+  + Cấu hình DMA:
+    Các tham số cho bộ DMA được cấu hình trong struct DMA_InitTypeDef. Gồm:
+
+              DMA_PeripheralBaseAddr:      Cấu hình địa chỉ của ngoại vi cho DMA. Đây là địa chỉ mà DMA sẽ lấy data hoặc truyền data tới cho ngoại vi.  ((uint8_t)& SPI->DR;)
+              DMA_MemoryBaseAddr:          Cấu hình địa chỉ vùng nhớ cần ghi/ đọc data .
+              DMA_DIR:                     Cấu hình hướng truyền DMA, từ ngoại vi tới vùng nhớ hay từ vùng nhớ tới ngoại vi.               (PeripheralDST --> truyền ra cho peripheral , PeripheralSRC --> ngoại vì truyền vào)
+              DMA_BufferSize:              Cấu hình kích cỡ buffer. Số lượng dữ liệu muốn gửi/nhận qua DMA.      
+              DMA_PeripheralInc:           Cấu hình địa chỉ ngoại vi có tăng sau khi truyền DMA hay không.                                 (DMA_peripheral_disable --> ko tăng (hoặc ENABLE))
+              DMA_MemoryInc:               Cấu hình địa chỉ bộ nhớ có tăng lên sau khi truyền DMA hay không.                               (DMA_MemoryINC_ENABLE --> kích hoạt tăng lên 1 khi nhận đc 1 bit)
+              DMA_PeripheralDataSize:      Cấu hình độ lớn data của ngoại vi.                                                              (DMA_PeripheralDataSize_Byte --> 1 Byte, 2 Byte (Half Word) hoặc 4byte (Word))
+              DMA_MemoryDataSize:          Cấu hình độ lớn data của bộ nhớ.                                                                (DMA_MemoryDataSize_Byte --> 1 Byte, 2 Byte (Half Word) hoặc 4byte (Word))
+              DMA_Mode:                    Cấu hình mode hoạt động.                                                                        (DMA_Mode_Circular)
+              DMA_Priority:                Cấu hình độ ưu tiên cho kênh DMA.                                                               (DMA_Priorty_Medium --> high, low, vey high)
+              DMA_M2M:                     Cấu hình sử dụng truyền từ bộ nhớ đếm bộ nhớ cho kênh DMA.                                      (DMA_M2M_Disable)
+
+    VD:
+
+            	DMA_InitStruct.DMA_Mode = DMA_Mode_Normal;
+            	DMA_InitStruct.DMA_DIR = DMA_DIR_PeripheralSRC;
+            	DMA_InitStruct.DMA_M2M = DMA_M2M_Disable;
+            	DMA_InitStruct.DMA_BufferSize = 35;
+            	DMA_InitStruct.DMA_MemoryBaseAddr = (uint32_t)buffer;
+            	DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+            	DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;
+            	DMA_InitStruct.DMA_PeripheralBaseAddr = (uint32_t)&SPI1->DR;
+            	DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+            	DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+            	DMA_InitStruct.DMA_Priority = DMA_Priority_Medium;
+
+              DMA_Init(DMA1_Chanel2, &DMA_InitStruct);
+              DMA_cmd(DMA1_Chanel2, ENABLE);
+              SPI_I2S_DMAcmd(SPI1, SPI_I2S_DMAReq_Rx, ENABLE);          // hàm này cho phép DMA truyền nhận thông qua các giao thức đã cấu hình (nếu muốn uart thì (UART_DMAcmd(UART1, DMA_RX | DMA_TX, ENABLE);)
+
+
 </details>
 <details><summary> LESSION 11 : Flash and Bootloader </summary>
 ## Flash
