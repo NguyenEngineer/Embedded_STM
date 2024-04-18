@@ -726,6 +726,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 
 </details>
 <details><summary> LESSION 10: DMA & PWM </summary>
+  
 ## DMA
 - Thông thường quá trình truyền data từ peripheral vào RAM thì phải qua CPU điều khiển.
 - CPU phải lấy lệnh từ bộ nhớ (FLASH) để thực thi các lệnh của chương trình. Vì vậy, khi cần truyền dữ liệu liên tục giữa Peripheral và RAM, CPU sẽ bị chiếm dụng, và không có thời gian làm các việc khác, hoặc có thể gây miss dữ liệu khi transfer. 
