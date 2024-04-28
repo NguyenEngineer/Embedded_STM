@@ -414,7 +414,9 @@ Khi không có cấu hình gì liên quan đến clock và đã gắn đúng th�
 - Prescaler là bộ chia tần số của timer. Bộ chia này có giá trị tối đa là 16 bit tương ứng với giá trị là 65535. Các giá trị này có thể được thay đổi và điều chỉnh bằng lập trình.
 - Cách tính presacler:  chọn bộ tim2 có clock cấp là 36M hz.
     B1: chọn bộ chia tần số CLockDivision. VD: chọn bộ chia 1 thì sau khi chia thì f = 36 MHZ
+  
     B2: Trong clock thì 1s nó sẽ thực hiện 36M dao động => 1 dao động = 1/36 000 000s
+  
     B3: Bộ prescaler qui định là sau bao nhiêu dao động thì nó sẽ đếm lên 1 lần. VD: ta muốn 1ms đếm lên 1 lần
         Để 1ms đếm lên 1 lần thì: 1ms = 10^-3,   lấy 10^-3 * ( 1/36 000 000 ) = 36 000.
         Vậy, để 1ms đếm lên 1 lần thì bộ Prescaler phải có giá trị = 36 000 - 1.
