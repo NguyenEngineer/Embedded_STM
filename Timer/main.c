@@ -16,10 +16,10 @@ int main(void)
 	
 	while(1)
 	{
-		GPIO_WriteBit(GPIOA, GPIO_Pin_5, Bit_RESET);
-		delay_ms(1000);
-		GPIO_WriteBit(GPIOA, GPIO_Pin_5, Bit_SET);
-		delay_ms(1000);
+		GPIO_SetBits(GPIOA, GPIO_Pin_5);
+		delay_ms(500);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_5);
+		delay_ms(500);
 	}
 	
 }
@@ -27,7 +27,7 @@ int main(void)
 void delay_ms (uint16_t ms)
 {
 	TIM_SetCounter(TIM2, 0);
-	while(TIM_GetCounter(TIM2) < ms*10){}
+	while(TIM_GetCounter(TIM2) < ms){}
 }
 
 void config_rcc(void)
@@ -41,7 +41,7 @@ void config_timer(void)
 	TIM_TimeBaseInitTypeDef TIM_InitStructure;
 	TIM_InitStructure.TIM_ClockDivision = TIM_CKD_DIV1;    //APB1 = 36M bo chia nho clock (chia 1,2,4)
 	TIM_InitStructure.TIM_Prescaler = 36000 - 1;		// so dao dong trong 1 ms, sau khi xong 1 ms thì period tang len 1
-	TIM_InitStructure.TIM_Period = 65536 - 1;    // Bo dem tu nap lai VD: period
+	TIM_InitStructure.TIM_Period = 65536 - 1;    // Bo dem tu nap lai
 	TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	
 	TIM_TimeBaseInit(TIM2, &TIM_InitStructure);

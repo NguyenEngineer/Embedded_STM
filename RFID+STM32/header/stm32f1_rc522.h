@@ -1,5 +1,11 @@
+/*
+* File: stm32f1_rc522.h
+* Author: Duong Bao Nguyen
+* Date: 4/18/2024
+* Description: This file are functions of RC522
+*/
 #include "stm32f10x.h"
-//#include "stm32f10x_gpio.h"
+#include "stdint.h"
 
 #define	uint8_t	unsigned char
 #define	uint	unsigned int
@@ -7,15 +13,12 @@
 //extern SPI_HandleTypeDef hspi2;
 #define MAX_LEN 16
 
-/////////////////////////////////////////////////////////////////////
-//pin secimi
-/////////////////////////////////////////////////////////////////////
 
-#define MFRC522_CS_GPIO		GPIOA
+#define MFRC522_CS_GPIO		GPIOB
 #define MFRC522_CS_PIN		GPIO_Pin_9
-#define MFRC522_CS_RCC		RCC_APB2Periph_GPIO
+#define MFRC522_CS_RCC		RCC_APB2Periph_GPIOB
 
-#define MFRC522_RST_GPIO	GPIOA
+#define MFRC522_RST_GPIO	GPIOB
 #define MFRC522_RST_PIN		GPIO_Pin_8
 #define MFRC522_RST_RCC		RCC_APB2Periph_GPIOB	
 
@@ -150,13 +153,3 @@ uint8_t MFRC522_Write(uint8_t blockAddr, uint8_t *writeData);
 uint8_t MFRC522_Read(uint8_t blockAddr, uint8_t *recvData);
 void MFRC522_Halt(void);								
 void MFRC522_StopCrypto1(void);
-
-															 
-															 
-															 
-															 
-															 
-															 
-															 
-															 
-

@@ -1,40 +1,25 @@
-    #include "delay.h"
+#include "delay.h"
 
-    /**
-     * @brief Initializes DWT_Clock_Cycle_Count for DWT_Delay_us function
-     * @return Error DWT counter
-     * 1: clock cycle counter not started
-     * 0: clock cycle counter works
-     */
-    uint32_t DWT_Delay_Init(void) {
-     /* Disable TRC */
-     CoreDebug->DEMCR &= ~CoreDebug_DEMCR_TRCENA_Msk; // ~0x01000000;
-     /* Enable TRC */
-     CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk; // 0x01000000;
-     /* Disable clock cycle counter */
-     DWT->CTRL &= ~DWT_CTRL_CYCCNTENA_Msk; //~0x00000001;
-     /* Enable clock cycle counter */
-     DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk; //0x00000001;
-     /* Reset the clock cycle counter value */
-     DWT->CYCCNT = 0;
-    /* 3 NO OPERATION instructions */
-    __ASM volatile ("NOP");
-    __ASM volatile ("NOP");
-     __ASM volatile ("NOP");
-     /* Check if clock cycle counter has started */
-    if(DWT->CYCCNT)
-    {
-     return 0; /*clock cycle counter started*/
-    }
-    else
-     {
-     return 1; /*clock cycle counter not started*/
-     }
-    }
-//////////
-    void	DWT_Delay_ms(volatile uint32_t miliseconds){
-    	while(miliseconds > 0){
-    		miliseconds--;
-    		DWT_Delay_us(1000);
-    	}
-    }
+
+
+void delay_ms(uint16_t ms)
+{
+	TIM_SetCounter(TIM2, 0);
+	while(TIM_GetCounter(TIM2) < ms) {}
+}
+
+
+void Tim_init(void)
+{
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+	
+	TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+	TIM_TimeBaseInitStruct.TIM_CounterMode   = TIM_CounterMode_Up;
+	TIM_TimeBaseInitStruct.TIM_Period				 = 65536 - 1;
+	TIM_TimeBaseInitStruct.TIM_Prescaler		 = 36000 - 1;				//1ms
+	
+	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStruct);
+	TIM_Cmd(TIM2, ENABLE);
+}
+

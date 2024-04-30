@@ -162,6 +162,15 @@ void MFRC522_SPI_Init(void)
 		RCC_APB1PeriphClockCmd(MFRC522_SPI_RCC,ENABLE);																// Enable clock SPI2 or SPI3
 	}
 	
+	// Set digital pin B0 as OUTPUT to connect it to the RFID /ENABLE pin 
+	GPIO_InitStruct.GPIO_Pin = MFRC522_CS_PIN;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;
+  GPIO_Init(MFRC522_CS_GPIO, &GPIO_InitStruct);
+	
+	GPIO_InitStruct.GPIO_Pin = MFRC522_RST_PIN;			// Set digital pin 10 , Not Reset and Power-down
+	GPIO_Init(MFRC522_RST_GPIO, &GPIO_InitStruct);
+	
 	GPIO_InitStruct.GPIO_Pin = MFRC522_SCK_PIN | MFRC522_MISO_PIN | MFRC522_MOSI_PIN;	// SCK, MISO, MOSI
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
@@ -200,10 +209,10 @@ void MFRC522_Init(void)
 	
 	//GPIO_SetBits(MFRC522_RST_GPIO,MFRC522_RST_PIN);					// not reset
 
-		// spi config
-	
-	MFRC522_SPI_Init();
 
+	MFRC522_SPI_Init();
+	GPIO_SetBits(MFRC522_CS_GPIO,MFRC522_CS_PIN);						// Activate the RFID reader
+	GPIO_SetBits(MFRC522_RST_GPIO,MFRC522_RST_PIN);	
 	MFRC522_Reset();
 
 
@@ -348,7 +357,7 @@ uint8_t MFRC522_ToCard(uint8_t command, uint8_t *sendData, uint8_t sendLen, uint
 
 /*
  * Fuction name: MFRC522_Request
-* Fuction: Show it, read it
+ * Fuction: Show it, read it
  * Input: reqMode - Phat is able,
  *			 	TagType - Type of check
  *			 	0x4400 = Mifare_UltraLight
@@ -387,13 +396,13 @@ uint8_t MFRC522_Anticoll(uint8_t *serNum)
 {
     uint8_t status;
     uint8_t i;
-	uint8_t serNumCheck=0;
+		uint8_t serNumCheck=0;
     uint unLen;
     
 
     //ClearBitMask(Status2Reg, 0x08);		//TempSensclear
     //ClearBitMask(CollReg,0x80);			//ValuesAfterColl
-	Write_MFRC522(BitFramingReg, 0x00);		//TxLastBists = BitFramingReg[2..0]
+		Write_MFRC522(BitFramingReg, 0x00);		//TxLastBists = BitFramingReg[2..0]
  
     serNum[0] = PICC_ANTICOLL;
     serNum[1] = 0x20;

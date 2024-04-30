@@ -26,6 +26,8 @@
 #define RTE_DEVICE_STDPERIPH_SPI
 /* Keil::Device:StdPeriph Drivers:TIM@3.6.0 */
 #define RTE_DEVICE_STDPERIPH_TIM
+/* Keil::Device:StdPeriph Drivers:USART@3.6.0 */
+#define RTE_DEVICE_STDPERIPH_USART
 
 
 #endif /* RTE_COMPONENTS_H */
