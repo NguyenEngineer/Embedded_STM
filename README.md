@@ -828,7 +828,8 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
         	TIM_Cmd(TIM3, ENABLE);
   + Cấu hình chân xuất PWM:
     Ngõ ra của xung sẽ được xuất trên các chân GPIO tương ứng với từng kênh của Timer, Mode thường dùng là AF_PP. Phải cấu hình cho các chân này, đồng thời bật RCC cho AFIO.
-    
+    **Lưu ý: Mỗi timer đều có 4 GPIO xuất PWM riêng biệt.
+    VD: timer 2 có 4 chân ngõ ra PWM tương ứng:
     ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/5533efe7-ff7e-46e4-869b-fc085463a021)
 
   + Để thay đổi độ rộng xung xuất ra, sử dụng hàm
