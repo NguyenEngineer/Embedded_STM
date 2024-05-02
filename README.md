@@ -792,7 +792,8 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 - Là phần điều chỉnh độ rộng của xung. PWM có 2 phần chính:
   + Tần số: Là số lần tín hiệu lặp lại trong một giây. Đối với servo, tần số thông thường là 50Hz (tức là, chu kỳ lặp lại sau mỗi 20ms).
   + Độ rộng xung (Pulse Width ): Là thời gian tín hiệu ở mức cao trong mỗi chu kỳ. Độ rộng xung thường được đo bằng microsecond (µs) và quyết định góc mà servo sẽ xoay đến.
-  + Tỉ lệ độ rộng xung với chu kì xung gọi là chu kỳ nhiệm vụ(Duty Cycle).   CT: Độ rộng xung / chu kỳ xung = chu kỳ nhiệm vụ.
+  + Tỉ lệ độ rộng xung với chu kì xung gọi là chu kỳ nhiệm vụ(Duty Cycle).
+     CT: Độ rộng xung / chu kỳ xung = chu kỳ nhiệm vụ.
 - Công thức tính toán độ rộng xung là:
   
                pulseWidth = MIN_PULSE_WIDTH + (MAX_PULSE_WIDTH - MIN_PULSE_WIDTH) * angle / 180;
@@ -806,7 +807,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
   + Cấu hình timer đếm lên sau 1us, và sẽ tràn(period) sau 20ms.
   + Cấu Hình TIM_OCInitTypeDef: Chế độ so sánh đầu ra để tạo PWM cho từng kênh:
     
-        TIM_OCMode = TIM_OCMode_PWM1: Chọn chế độ hoạt động cho Output Compare. chế độ PWM1, Kênh 1 đầu ra sẽ ở mức cao cho đến khi giá trị đếm bằng giá trị so sánh (TIM_Pulse), sau đó chuyển xuống mức thấp.
+        TIM_OCMode = TIM_OCMode_PWM1: Chọn chế độ PWM1 hoặc PWM2 cho Output Compare. VD: ta chọn PWM tương ứng với Kênh 1 đầu ra sẽ ở mức cao cho đến khi giá trị đếm bằng giá trị so sánh (TIM_Pulse), sau đó chuyển xuống mức thấp.
         TIM_OutputState = TIM_OutputState_Enable: cho phép tín hiệu PWM được xuất ra từ chân tương ứng của MCU.
         TIM_Pulse: Đặt giá trị ban đầu cho độ rộng xung.
         TIM_OCPolarity = TIM_OCPolarity_High:  tín hiệu PWM lúc đầu là cao (High), tín hiệu PWM bắt đầu ở mức cao và chuyển xuống mức thấp khi giá trị đếm bằng TIM_Pulse.
@@ -815,8 +816,25 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
           Gọi hàm TIM_OCxInit(); để cấu hình cho kênh x tương ứng. hàm có 2 tham số (TIMER, struct TIM_OCInitTypeDef)
           Hàm TIM_OCxPreloadConfig(); cấu hình Timer ở chế độ nạp lại (TIM_OCPreload_Enable) hay không nạp lại (TIM_OCPreload_Disable).
           Gọi hàm TIM_Cmd(); để cho phép Timer hoạt động.
+    Ví dụ:
     
-  + Để thay đổi độ rộng xung xuất ra, sử dụng hàm TIM_SetCompare1(TIMx, pulseWidth); với Timer sử dụng là TIMx và độ rộng pulseWidth.
+        	TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;
+        	TIM_OCInitStruct.TIM_OutputState = TIM_OutputNState_Enable;
+        	TIM_OCInitStruct.TIM_Pulse = 0;
+        	TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
+        	
+        	TIM_OC1Init(TIM3, &TIM_OCInitStruct);
+        	TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);
+        	TIM_Cmd(TIM3, ENABLE);
+  + Cấu hình chân xuất PWM:
+    Ngõ ra của xung sẽ được xuất trên các chân GPIO tương ứng với từng kênh của Timer, Mode thường dùng là AF_PP. Phải cấu hình cho các chân này, đồng thời bật RCC cho AFIO.
+    
+    ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/5533efe7-ff7e-46e4-869b-fc085463a021)
+
+  + Để thay đổi độ rộng xung xuất ra, sử dụng hàm
+
+          TIM_SetCompareX(TIMx, pulseWidth); với X là kênh tương ứng đã chọn, Timer sử dụng là TIMx và độ rộng pulseWidth.
+    
       Khi đó, tổng quát cách thay đổi góc của Servo:
       Đặt giá trị ban đầu cho Servo.
       Chuyển đổi giá trị góc sang độ rộng xung bằng công thức.
