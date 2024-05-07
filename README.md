@@ -933,4 +933,6 @@ VD: hàm chính
       uint8_t data[5] = {1,6,7,8,9};
       Flash_Erase(0x80000000);
       Flash_WriteNumByte(0x80000000, data, 5); }
+      
+## Bootloader
 
