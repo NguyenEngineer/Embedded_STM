@@ -18,8 +18,7 @@ void UART_Config_debug(void){
 	GPIO_InitTypeDef GPIOInitStruct;
 	USART_InitTypeDef USARTInitStruct;
 	//
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_USART1, ENABLE);
 	//
 	GPIOInitStruct.GPIO_Pin = UART_TX;
 	GPIOInitStruct.GPIO_Speed = GPIO_Speed_50MHz;

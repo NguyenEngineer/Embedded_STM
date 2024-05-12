@@ -2,36 +2,28 @@
 #include "PWM.h"
 
 
-
-
-
-/*void caculate_PWM()
-{
-	pulseWidth = MIN_PULSE_WIDTH + (MAX_PULSE_WIDTH - MIN_PULSE_WIDTH) * angle / 180;
-}*/
-
 void Tim_PWMinit(void)
 {
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
 	GPIO_InitTypeDef GPIOInitStruct;
 	
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
 	
-	////////////////////////////////////////////////////////////  PA3
-	GPIOInitStruct.GPIO_Pin = GPIO_Pin_3;
+	////////////////////////////////////////////////////////////  PA1
+	GPIOInitStruct.GPIO_Pin = GPIO_Pin_1;
 	GPIOInitStruct.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIOInitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	//GPIOInitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA, &GPIOInitStruct);
 	
 	////////////////////////////////////////////////////////////	
 	TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStruct.TIM_CounterMode   = TIM_CounterMode_Up;
-	TIM_TimeBaseInitStruct.TIM_Period				 = 20-1;
-	TIM_TimeBaseInitStruct.TIM_Prescaler		 = 36000 - 1;				//1ms
+	TIM_TimeBaseInitStruct.TIM_Period				 = 10000-1;
+	TIM_TimeBaseInitStruct.TIM_Prescaler		 = 72-1;			//1ms
 	
-	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseInitStruct);
-	TIM_Cmd(TIM3, ENABLE);
+	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStruct);
+	TIM_Cmd(TIM2, ENABLE);
 	
 	////////////////////////////////////////////////////////////
 	
@@ -42,7 +34,7 @@ void Tim_PWMinit(void)
 	TIM_OCInitStruct.TIM_Pulse = 0;
 	TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
 	
-	TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);
-	TIM_OC4Init(TIM3, &TIM_OCInitStruct);
-	TIM_Cmd(TIM3, ENABLE);
+	TIM_OC2Init(TIM2, &TIM_OCInitStruct);
+	TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);
+	TIM_Cmd(TIM2, ENABLE);
 }

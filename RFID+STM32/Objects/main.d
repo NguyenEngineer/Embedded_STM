@@ -14,6 +14,6 @@
   E:\Keil_V5\Arm\Keil\STM32F1xx_DFP\2.4.1\Device\StdPeriph_Driver\inc\stm32f10x_tim.h \
   E:\Keil_V5\Arm\Keil\STM32F1xx_DFP\2.4.1\Device\StdPeriph_Driver\inc\stm32f10x_usart.h \
   E:\Keil_V5\Arm\Keil\STM32F1xx_DFP\2.4.1\Device\StdPeriph_Driver\inc\misc.h \
-  header\uart_debug.h header\stm32f1_rc522.h header\delay.h header\PWM.h \
   E:\Keil_V5\Arm\ARMCLANG\include\stdio.h \
-  E:\Keil_V5\Arm\ARMCLANG\include\string.h
+  E:\Keil_V5\Arm\ARMCLANG\include\string.h header\uart_debug.h \
+  header\stm32f1_rc522.h header\delay.h header\PWM.h
