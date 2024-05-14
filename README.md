@@ -936,3 +936,38 @@ VD: hàm chính
       
 ## Bootloader
 
+
+
+
+
+
+</details>
+<details><summary> LESSION: V--Model </summary>
+
+![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/bd8f96f8-f748-400d-9b3f-3c59cd7c5f75)
+
+Phần dành cho Dev:
+
+B1 -- Requirement Gathering : Thu thập thông tin yêu cầu, phân tích tính năng (Đọc mô tả nhiệm vụ, các yêu cầu).
+
+B2 -- Requirement Analysis : Xác định cụ thể về yêu cầu, biến rõ những chi tiết mình cần phát triển. 
+
+      VD: Giao task làm về RFID thì mình cần phải biết là RFID phải làm những gì (SPI, I2C, GPIO, ...)
+
+B3 -- Software Design : Viết chương trình (viết cho chạy được và fix các lỗi warring)
+
+B4 -- Test Planning (Modul Design) : Lên kế hoạch để kiểm thử code design.
+
+B5 -- Coding (Development) : Hoàn thiện sản phẩm để duyệt
+
+Phần dành cho tester:
+
+B6 -- Unit test : Test từng modul
+
+B7 -- Intergration test :  Test từng luồng chạy của chương trình
+
+B8 -- System Testing : Kiểm tra thực tế hoạt động của hệ thống
+
+B9 -- Acceptance : Chấp nhận
+
+
