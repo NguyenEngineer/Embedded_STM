@@ -67,60 +67,79 @@ int main(void)
 	MFRC522_Init();
 	Tim_PWMinit();
 	
-//	while(1) {
-//		//USART_SendData(USART2,'H');
-//		blink_led();
-//		
-//	}
-	while(1)
-	{			
-//		TIM_SetCompare2(TIM2, 250);
-//		delay_ms(100);
-//		TIM_SetCompare2(TIM2, 750);
-//		delay_ms(100);
-		
-		printf("Start RFID\n");
-		delay_ms(100);
-//		status = MI_ERR;
-//		while(status != MI_OK) {	
-//			status  = MFRC522_Request(PICC_REQIDL,str);  // check your card are put into yet??
-//			delay_ms(100);
-//			blink_led();
-//		}
-//		//printf("Find your ID card");
-//		status = MFRC522_Anticoll(str);			// chong de the len nhau va kiem tra data doc co trung ko
-//		memcpy(UID, str, 5);
-//		delay_ms(100);
-//		
-//		if(status == MI_OK)
-//		{
-//			//printf("ID card number: %x, %x, %x, %x, %x", UID[0], UID[1], UID[2], UID[3], UID[4]);
-//			if((UID[0]==116) && (UID[1]==188) && (UID[2]==230) && (UID[3]==3) && (UID[4]==45) )
-//      {
-//				check = 1;
-//			}else check = 0;
-//		}
-//		
-//		if(check == 1)
-//		{
-//			//printf("Correct id card");
-//			MFRC522_SelectTag(str);
-//			MFRC522_Auth(PCD_AUTHENT, 2, Key, UID);
-//			//printf("Sucessfully");
-//			
-//			while(1)
-//			{
-//				GPIO_ResetBits(GPIOA, GPIO_Pin_5);
-//				delay_ms(100);
-//				GPIO_SetBits(GPIOA, GPIO_Pin_5);
-//				delay_ms(100);
-//			}
+//	while(1)
+//	{
 
-//		}
+//		TIM_SetCompare2(TIM2, 6);				//0
+//		delay_ms(2000);
+//		TIM_SetCompare2(TIM2, 15); 			// 90
+//		delay_ms(2000);
+//		TIM_SetCompare2(TIM2, 25);			//180
+//		delay_ms(2000);
+//	}
+		delay_ms(500);
+	while(1)
+	{		
+		printf("Start RFID\n");		
+		TIM_SetCompare2(TIM2, 6);
+		delay_ms(500);
+		status = MI_ERR;
+
+		while(status != MI_OK) {	
+			status = MFRC522_Request(PICC_REQIDL, str);  // check your card are put into yet??
+			delay_ms(100);
+			GPIO_SetBits(GPIOA, GPIO_Pin_5);
+			//blink_led();
+		}
+		printf("Find your ID card\n");
+		status = MFRC522_Anticoll(str);			// chong de the len nhau va kiem tra data doc co trung ko
+		memcpy(UID, str, 5);
+		delay_ms(100);
+		
+		if(status == MI_OK)
+		{
+			printf("ID card number: %x, %x, %x, %x, %x\n", UID[0], UID[1], UID[2], UID[3], UID[4]);
+			
+			if((UID[0]==116) && (UID[1]==188) && (UID[2]==230) && (UID[3]==3) && (UID[4]==45) )
+      {
+				check = 1;
+			}else	if((UID[0]==0xC1) && (UID[1]==0x09) && (UID[2]==0x98) && (UID[3]==0x1D) && (UID[4]==0x4D))
+			{
+				check = 2;
+			}
+		}
+		
+		if(check == 1)
+		{
+			printf("Correct id card_1\n");
+			delay_ms(100);
+			MFRC522_SelectTag(str);
+			MFRC522_Auth(PCD_AUTHENT, 2, Key, UID);
+			printf("Sucessfully\n");
+			
+//			while(status == MI_OK)
+//			{
+				TIM_SetCompare2(TIM2, 15);
+
+			delay_ms(5000);
+			check = 0;
+		}else if(check == 2)
+		{
+			printf("Correct id card_2\n");
+			delay_ms(100);
+			MFRC522_SelectTag(str);
+			MFRC522_Auth(PCD_AUTHENT, 2, Key, UID);
+			printf("Sucessfully\n");
+			
+//			while(status == MI_OK){
+				TIM_SetCompare2(TIM2, 25);
+			delay_ms(5000);
+			check = 0;
+		}
 		
 		//MFRC522_StopCrypto1();
-		//printf("RFID STOP");
-	}	
+		printf("RFID STOP\n");
+	}
 }
 
 void blink_led(void)

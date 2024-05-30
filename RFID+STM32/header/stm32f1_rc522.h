@@ -7,7 +7,10 @@
 #include "stm32f10x.h"
 #include "stdint.h"
 
-#define	uint8_t	unsigned char
+//#define	uchar	unsigned char
+//#define	uint	unsigned int
+	
+#define	uchar	unsigned char
 #define	uint	unsigned int
 	
 //extern SPI_HandleTypeDef hspi2;
@@ -131,25 +134,36 @@
 #define     Reserved32            0x3D   
 #define     Reserved33            0x3E   
 #define     Reserved34			  		0x3F
-//-----------------------------------------------
-// The desire to use
-uint8_t RC522_SPI_Transfer(uint8_t data);
-void Write_MFRC522(uint8_t addr, uint8_t val);
-uint8_t Read_MFRC522(uint8_t addr);
-void SetBitMask(uint8_t reg, uint8_t mask);
-void ClearBitMask(uint8_t reg, uint8_t mask);
-void AntennaOn(void);
-void AntennaOff(void);
-void MFRC522_Reset(void);
-void MFRC522_SPI_Init(void);
+
+
+//uchar RC522_SPI_Transfer(uchar data);
+//void Write_MFRC522(uchar addr, uchar val);
+//uchar Read_MFRC522(uchar addr);
+//void SetBitMask(uchar reg, uchar mask);
+//void ClearBitMask(uchar reg, uchar mask);
+//void AntennaOn(void);
+//void AntennaOff(void);
+//void MFRC522_Reset(void);
+//void MFRC522_SPI_Init(void);
+//void MFRC522_Init(void);
+//uchar MFRC522_ToCard(uchar command, uchar *sendData, uchar sendLen, uchar *backData, uint *backLen);
+//uchar MFRC522_Request(uchar reqMode, uchar *TagType);
+//uchar MFRC522_Anticoll(uchar *serNum);
+//void CalulateCRC(uchar *pIndata, uchar len, uchar *pOutData);
+//uchar MFRC522_SelectTag(uchar *serNum);
+//uchar MFRC522_Auth(uchar authMode, uchar BlockAddr, uchar *Sectorkey, uchar *serNum);
+//uchar MFRC522_Write(uchar blockAddr, uchar *writeData);				
+//uchar MFRC522_Read(uchar blockAddr, uchar *recvData);
+//void MFRC522_Halt(void);								
+//void MFRC522_StopCrypto1(void);
+
 void MFRC522_Init(void);
-uint8_t MFRC522_ToCard(uint8_t command, uint8_t *sendData, uint8_t sendLen, uint8_t *backData, uint *backLen);
-uint8_t MFRC522_Request(uint8_t reqMode, uint8_t *TagType);
-uint8_t MFRC522_Anticoll(uint8_t *serNum);
-void CalulateCRC(uint8_t *pIndata, uint8_t len, uint8_t *pOutData);
-uint8_t MFRC522_SelectTag(uint8_t *serNum);
-uint8_t MFRC522_Auth(uint8_t authMode, uint8_t BlockAddr, uint8_t *Sectorkey, uint8_t *serNum);
-uint8_t MFRC522_Write(uint8_t blockAddr, uint8_t *writeData);				
-uint8_t MFRC522_Read(uint8_t blockAddr, uint8_t *recvData);
-void MFRC522_Halt(void);								
-void MFRC522_StopCrypto1(void);
+uchar MFRC522_Request(uchar reqMode, uchar *TagType);
+uchar MFRC522_Anticoll(uchar *serNum);
+uchar MFRC522_SelectTag(uchar *serNum);
+uchar MFRC522_Auth(uchar authMode, uchar BlockAddr, uchar *Sectorkey, uchar *serNum);
+uchar MFRC522_Write(uchar blockAddr, uchar *writeData);				
+uchar MFRC522_Auth(uchar authMode, uchar BlockAddr, uchar *Sectorkey, uchar *serNum);
+uchar MFRC522_Read(uchar blockAddr, uchar *recvData);
+void MFRC522_Halt(void);															 
+
