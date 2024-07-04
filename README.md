@@ -443,8 +443,14 @@ Tương tự các ngoại vi khác, cần xác định clock cấp cho timer, c�
 ![image](https://github.com/phatminhswe/stm32/assets/162662273/17a29070-22d2-42b0-9e14-1145ee346b01)
 
 
-
 7199 tương ứng với giá trị PSC, 9999 tương ứng với Period. Clock cung cấp cho TIM4 là 72Mhz. Tính theo công thức ta sẽ được thời gian ngắt tràn là 1s. 
+
+
+
+
+
+
+
 
 
   
@@ -457,8 +463,9 @@ Các MCU truyền nhận dữ liệu với nhau hoặc với các thiết bị  
 
 # 1 SPI.
 
-SPI – Serial Peripheral Interface – hay còn gọi là giao diện ngoại vi nối tiếp, được phát triển bởi hãng Motorola. 
-Chuẩn đồng bộ nối truyền dữ liệu ở chế độ full - duplex (hay gọi là "song công toàn phần". Nghĩa là tại 1 thời điểm có thể xảy ra đồng thời quá trình truyền và nhận. Là giao tiếp đồng bộ, bất cứ quá trình nào cũng đều được đồng bộ với xung clock sinh ra bởi thiết bị Master  
+SPI – Serial Peripheral Interface – hay còn gọi là giao diện ngoại vi nối tiếp.
+Chuẩn đồng bộ nối truyền dữ liệu ở chế độ full - duplex (hay gọi là "song công toàn phần". Nghĩa là tại 1 thời điểm có thể xảy ra đồng thời quá trình truyền và nhận. 
+Là giao tiếp đồng bộ, bất cứ quá trình nào cũng đều được đồng bộ với xung clock sinh ra bởi thiết bị Master  
 Tốc độ truyền thông cao: SPI cho phép truyền dữ liệu với tốc độ rất nhanh, thường đạt được tốc độ Mbps hoặc thậm chí hàng chục Mbps. Điều này rất hữu ích khi cần truyền dữ liệu nhanh và đáng tin cậy trong các ứng dụng như truyền thông không dây, điều khiển từ xa và truyền dữ liệu đa phương tiện.
 
 **SPI sử dụng 4 đường giao tiếp nên đôi khi được gọi là chuẩn truyền thông “ 4 dây”:**
@@ -615,12 +622,22 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 ![image](https://github.com/phatminhswe/stm32/assets/162662273/f040dacf-b6ef-4dfb-9987-ee01cf133397)
 
 
+
+
+
+
+
+
+
   
 </details>
 <details><summary> LESSION 4 : SPI </summary>
   
-SPI – Serial Peripheral Interface – hay còn gọi là giao diện ngoại vi nối tiếp, được phát triển bởi hãng Motorola. 
-Chuẩn đồng bộ nối truyền dữ liệu ở chế độ full - duplex (hay gọi là "song công toàn phần". Nghĩa là tại 1 thời điểm có thể xảy ra đồng thời quá trình truyền và nhận. Là giao tiếp đồng bộ, bất cứ quá trình nào cũng đều được đồng bộ với xung clock sinh ra bởi thiết bị Master  
+SPI – Serial Peripheral Interface – hay còn gọi là giao diện ngoại vi nối tiếp.
+Chuẩn đồng bộ nối truyền dữ liệu ở chế độ full - duplex (hay gọi là "song công toàn phần". Nghĩa là tại 1 thời điểm có thể xảy ra đồng thời quá trình truyền và nhận. 
+
+Là giao tiếp đồng bộ, bất cứ quá trình nào cũng đều được đồng bộ với xung clock sinh ra bởi thiết bị Master  
+
 Tốc độ truyền thông cao: SPI cho phép truyền dữ liệu với tốc độ rất nhanh, thường đạt được tốc độ Mbps hoặc thậm chí hàng chục Mbps. Điều này rất hữu ích khi cần truyền dữ liệu nhanh và đáng tin cậy trong các ứng dụng như truyền thông không dây, điều khiển từ xa và truyền dữ liệu đa phương tiện.
 
 **SPI sử dụng 4 đường giao tiếp nên đôi khi được gọi là chuẩn truyền thông “ 4 dây”:**
@@ -664,6 +681,25 @@ SPI có 4 chế độ hoạt động phụ thuộc vào cực của xung giữ (
 - Mode 1 - xung nhịp của đồng hồ ở mức thấp (CPOL = 0) và dữ liệu được lấy mẫu khi chuyển từ cao sang thấp (cạnh xuống) (CPHA = 1).
 - Mode 2 - xung nhịp của đồng hồ ở mức cao (CPOL = 1) và dữ liệu được lấy mẫu khi chuyển từ cao sang thấp (cạnh lên) (CPHA = 0).
 - Mode 3 - xung nhịp của đồng hồ ở mức cao (CPOL = 1) và dữ liệu được lấy mẫu khi chuyển từ thấp sang cao (cạnh xuông) (CPHA = 1).
+
+Cấu hình hoạt động:
+
+      void SPI_Config(){
+      	SPI_InitTypeDef SPI_InitStructure;
+      	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+      	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+      	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;//72Mhs/16
+      	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+      	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+      	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+      	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_LSB;//0b001001001
+      	SPI_InitStructure.SPI_CRCPolynomial = 7;
+      	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
+      	
+      	SPI_Init(SPI1, &SPI_InitStructure);
+      	SPI_Cmd(SPI1, ENABLE);
+      }
+
 </details>
 <details><summary> LESSION 5 : I2C </summary>
 
