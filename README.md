@@ -686,19 +686,24 @@ Cấu hình hoạt động:
 
       void SPI_Config(){
       	SPI_InitTypeDef SPI_InitStructure;
-      	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
-      	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
-      	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;//72Mhs/16
-      	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-      	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
-      	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
-      	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_LSB;//0b001001001
-      	SPI_InitStructure.SPI_CRCPolynomial = 7;
-      	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-      	
+      	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;                        //Quy định chế độ hoạt động của thiết bị SPI (Master hay Slave)
+      	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;    //Quy định kiểu truyền của thiết bị.
+      	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;//72Mhs/16    //Hệ số chia clock cấp cho Module SPI
+      	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;                    //Cấu hình cực tính của SCK . Có 2 chế độ: CPOL_Low: Cực tính mức 0 khi SCK không truyền xung. CPOL_High: Cực tính mức 1 khi SCK không truyền xung.
+      	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;          //Cấu hình chế độ hoạt động của SCK. Có 2 chế độ: CPHA_1Edge: Tín hiệu truyền đi ở cạnh xung đầu tiên. CPHA_2Edge: Tín hiệu truyền đi ở cạnh xung thứ hai.
+      	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;      //Cấu hình số bit truyền. 8 hoặc 16 bit.
+      	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_LSB;//0b001001001    //Cấu hình chiều truyền của các bit là MSB hay LSB. (MSB truyền bit bên trái trước, LSB truyền bit bên phải trước)
+      	SPI_InitStructure.SPI_CRCPolynomial = 7;          //Cấu hình số bit CheckSum cho SPI.
+      	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;        //Cấu hình chân SS là điều khiển bằng thiết bị hay phần mềm.
+
       	SPI_Init(SPI1, &SPI_InitStructure);
       	SPI_Cmd(SPI1, ENABLE);
       }
+
+
+
+
+      
 
 </details>
 <details><summary> LESSION 5 : I2C </summary>
