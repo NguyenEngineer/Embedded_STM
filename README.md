@@ -332,6 +332,14 @@ GPIO_EventOutputConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
 ``` 
 ● Mô tả: Đặt lại tất cả các thanh ghi của AFIO (Alternate Function IO) về giá trị mặc định.
 
+
+
+
+
+
+
+
+
   
 </details>
 <details><summary> LESSION 2 : Ngắt và Timer </summary>
@@ -540,7 +548,19 @@ Dữ liệu truyền qua Uart sẽ đóng thành các gói (packet). Mỗi gói 
 ![image](https://github.com/phatminhswe/stm32/assets/162662273/7b1b5b2d-f2a1-449d-b619-e86bd5072975)
 
 
-Quá trình truyền dữ liệu Uart sẽ diễn ra dưới dạng các gói dữ liệu này, bắt đầu bằng 1 bit bắt đầu, đường mức cao được kéo dần xuống thấp. Sau bit bắt đầu là 5 – 9 bit dữ liệu truyền trong khung dữ liệu của gói, theo sau là bit chẵn lẻ tùy chọn để nhằm xác minh việc truyền dữ liệu thích hợp. Sau cùng, 1 hoặc nhiều bit dừng sẽ được truyền ở nơi đường đặt tại mức cao. Vậy là sẽ kết thúc việc truyền đi một gói dữ liệu
+Quá trình truyền dữ liệu Uart sẽ diễn ra dưới dạng các gói dữ liệu này, bắt đầu bằng 1 bit bắt đầu, đường mức cao được kéo dần xuống thấp. 
+
+Sau bit bắt đầu là 5 – 9 bit dữ liệu truyền trong khung dữ liệu của gói.
+
+Theo sau là bit chẵn lẻ tùy chọn để nhằm xác minh việc truyền dữ liệu thích hợp.  
+
+          Bit chẵn lẻ là 0 (tính chẵn), thì tổng các bit 1 trong khung dữ liệu phải là một số chẵn.
+          
+          Bit chẵn lẻ là 1 (tính lẻ), các bit 1 trong khung dữ liệu sẽ tổng thành một số lẻ.
+          
+          Khi bit chẵn lẻ khớp với dữ liệu, UART sẽ biết rằng quá trình truyền không có lỗi. Nhưng nếu bit chẵn lẻ là 0 và tổng là số lẻ; hoặc bit chẵn lẻ là 1 và tổng số là chẵn, UART sẽ biết rằng các bit trong khung dữ liệu đã thay đổi.
+
+Sau cùng, 1 hoặc nhiều bit dừng sẽ được truyền ở nơi đường đặt tại mức cao. Vậy là sẽ kết thúc việc truyền đi một gói dữ liệu
 
 
 ![image](https://github.com/phatminhswe/stm32/assets/162662273/a33a8312-f9f9-42d6-b4ce-75827c7e4bac)
@@ -875,13 +895,13 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
             VD:
 
                       unsigned char UART_Receive(void){
-                        	unsigned char DataValue = 0;
-                        	while(GPIO_ReadInputDataBit(UART_GPIO, RX_Pin) == 1);
-                        	delay_us(BRateTime);
-                        	delay_us(BRateTime/2);
-                        	for ( unsigned char i = 0; i < 8; i++ ){
-                        		if ( GPIO_ReadInputDataBit(UART_GPIO, RX_Pin) == 1 ){
-                        			DataValue += (1<<i);}                               // nếu nhận được bit 1 thì sẽ dịch bit đó sang trái theo thứ tự bit nhận đc và cộng dồn vào biến Datavalue
+                      unsigned char DataValue = 0;
+                      while(GPIO_ReadInputDataBit(UART_GPIO, RX_Pin) == 1);
+                      delay_us(BRateTime);
+                      delay_us(BRateTime/2);
+                      for ( unsigned char i = 0; i < 8; i++ ){
+                        if ( GPIO_ReadInputDataBit(UART_GPIO, RX_Pin) == 1 ){
+                        		DataValue += (1<<i);}                               // nếu nhận được bit 1 thì sẽ dịch bit đó sang trái theo thứ tự bit nhận đc và cộng dồn vào biến Datavalue
                                                                                   // VD:  DataValue có 8 bit 0, bit đầu nhận đc là 1:  for i = 0  dịch (1 << 0) và cộng vào DataValue  0x00 + 0x01 = 0x01 => DataValue = 0x01
                                                                                            DataValue có bit 0x01, bit thứ 2 nhận đc là 1:  for i = 1  dịch (1 << 1) và cộng vào DataValue  0x01 + 0x02 = 0x03 => DataValue = 0x03
                         		delay_us(BRateTime);
