@@ -941,12 +941,68 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
                   	USART_Init(USART1, &USARTInitStruct);
                   	USART_Cmd(USART1,ENABLE);
                   }
+
+
+
+
+
+
+
+
   
 </details>
 <details><summary> LESSION 8: Ngắt ngoài, ngắt truyền thông (interrup)  </summary>
 
+**Ngắt ngoài: **
+
+- Xảy ra khi có thay đổi điện áp trên các chân GPIO được cấu hình làm ngõ vào ngắt.
+
+- LOW: kích hoạt ngắt liên tục khi chân ở mức thấp.
+
+- HIGH: Kích hoạt liên tục khi chân ở mức cao.
+
+- Rising: Kích hoạt khi trạng thái trên chân chuyển từ thấp lên cao.
+
+- Falling: Kích hoạt khi trạng thái trên chân chuyển từ cao xuống thấp.
+
+**Ngắt timer:**
+
+- Ngắt Timer xảy ra khi giá trị trong thanh ghi đếm của timer tràn. Giá trị tràn được xác định bởi giá trị cụ thể trong thanh ghi đếm của timer.
+- Vì đây là ngắt nội trong MCU, nên phải reset giá trị thanh ghi timer để có thể tạo được ngắt tiếp theo.
+
+
+**Ngắt theo các giao thức truyền thông:**
+
+- Ngắt truyền nhận xảy ra khi có sự kiện truyền/nhận dữ liệu giữ MCU với các thiết bị bên ngoài hay với MCU. Ngắt này sử dụng cho nhiều phương thức như Uart, SPI, I2C…v.v nhằm đảm bảo việc truyền nhận chính xác.
+
+**Độ ưu tiên ngắt**
+
+- Độ ưu tiên ngắt là khác nhau ở các ngắt. Nó xác định ngắt nào được quyền thực thi khi nhiều ngắt xảy ra đồng thời.
+
+- STM32 quy định ngắt nào có số thứ tự ưu tiên càng thấp thì có quyền càng cao. Các ưu tiên ngắt có thể lập trình được.
+
+
+
+
+
+
+
+
+
+
 </details>
 <details><summary> LESSION 9: ADC  </summary>
+
+
+
+
+
+
+
+
+
+
+
 
 </details>
 <details><summary> LESSION 10: DMA & PWM </summary>
