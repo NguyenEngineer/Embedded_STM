@@ -346,12 +346,12 @@ GPIO_EventOutputConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
 
 # 1.Ngắt
 
-Ngắt là 1 sự kiện khẩn cấp xảy ra trong hay ngoài vi điều khiển. Nó yêu MCU phải dừng chương trình chính và thực thi chương trình ngắt.
+- Ngắt là 1 sự kiện khẩn cấp xảy ra trong hay ngoài vi điều khiển. Nó yêu MCU phải dừng chương trình chính và thực thi chương trình ngắt.
 
 **Các loại ngắt thông dụng**
 
-Mỗi ngắt có 1 trình phục vụ ngắt, sẽ yêu cầu MCU thực thi lệnh tại trình phục vụ ngắt khi có ngắt xảy ra.
-Các ngắt có các địa chỉ cố định trong bộ nhớ để giữ các trình phục vụ. Các địa chỉ này gọi là vector ngắt.
+- Mỗi ngắt có 1 trình phục vụ ngắt, sẽ yêu cầu MCU thực thi lệnh tại trình phục vụ ngắt khi có ngắt xảy ra.
+- Các ngắt có các địa chỉ cố định trong bộ nhớ để giữ các trình phục vụ. Các địa chỉ này gọi là vector ngắt.
 
 ![image](https://github.com/phatminhswe/stm32/assets/162662273/3f0b8c5f-deab-4e8d-b7f1-24f1b228fc53)
 
@@ -360,35 +360,36 @@ Quá trình ngắt:
 
 ![image](https://github.com/phatminhswe/stm32/assets/162662273/031f2525-dfff-424c-a313-efa6726625d5)
 
-
+- Khi đang chạy trong chương trình chính nếu có ngắt sảy ra thì con trỏ PC sẽ lưu địa chỉ của câu lệnh đang thực thi
+- Xong rồi nhảy tới ngắt để thực thi
 
 **Ngắt ngoài: **
 
-Xảy ra khi có thay đổi điện áp trên các chân GPIO được cấu hình làm ngõ vào ngắt.
+- Xảy ra khi có thay đổi điện áp trên các chân GPIO được cấu hình làm ngõ vào ngắt.
 
-LOW: kích hoạt ngắt liên tục khi chân ở mức thấp.
+- LOW: kích hoạt ngắt liên tục khi chân ở mức thấp.
 
-HIGH: Kích hoạt liên tục khi chân ở mức cao.
+- HIGH: Kích hoạt liên tục khi chân ở mức cao.
 
-Rising: Kích hoạt khi trạng thái trên chân chuyển từ thấp lên cao.
+- Rising: Kích hoạt khi trạng thái trên chân chuyển từ thấp lên cao.
 
-Falling: Kích hoạt khi trạng thái trên chân chuyển từ cao xuống thấp.
+- Falling: Kích hoạt khi trạng thái trên chân chuyển từ cao xuống thấp.
 
 **Ngắt timer:**
 
-Ngắt Timer xảy ra khi giá trị trong thanh ghi đếm của timer tràn. Giá trị tràn được xác định bởi giá trị cụ thể trong thanh ghi đếm của timer.
-Vì đây là ngắt nội trong MCU, nên phải reset giá trị thanh ghi timer để có thể tạo được ngắt tiếp theo.
+- Ngắt Timer xảy ra khi giá trị trong thanh ghi đếm của timer tràn. Giá trị tràn được xác định bởi giá trị cụ thể trong thanh ghi đếm của timer.
+- Vì đây là ngắt nội trong MCU, nên phải reset giá trị thanh ghi timer để có thể tạo được ngắt tiếp theo.
 
 
 **Ngắt truyền nhận:**
 
-Ngắt truyền nhận xảy ra khi có sự kiện truyền/nhận dữ liệu giữ MCU với các thiết bị bên ngoài hay với MCU. Ngắt này sử dụng cho nhiều phương thức như Uart, SPI, I2C…v.v nhằm đảm bảo việc truyền nhận chính xác.
+- Ngắt truyền nhận xảy ra khi có sự kiện truyền/nhận dữ liệu giữ MCU với các thiết bị bên ngoài hay với MCU. Ngắt này sử dụng cho nhiều phương thức như Uart, SPI, I2C…v.v nhằm đảm bảo việc truyền nhận chính xác.
 
 **Độ ưu tiên ngắt**
 
-Độ ưu tiên ngắt là khác nhau ở các ngắt. Nó xác định ngắt nào được quyền thực thi khi nhiều ngắt xảy ra đồng thời.
+- Độ ưu tiên ngắt là khác nhau ở các ngắt. Nó xác định ngắt nào được quyền thực thi khi nhiều ngắt xảy ra đồng thời.
 
-STM32 quy định ngắt nào có số thứ tự ưu tiên càng thấp thì có quyền càng cao. Các ưu tiên ngắt có thể lập trình được.
+- STM32 quy định ngắt nào có số thứ tự ưu tiên càng thấp thì có quyền càng cao. Các ưu tiên ngắt có thể lập trình được.
 
 # 2.TIMER
 
