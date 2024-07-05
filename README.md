@@ -708,13 +708,14 @@ Cấu hình hoạt động:
 </details>
 <details><summary> LESSION 5 : I2C </summary>
 
+
+I2C là một giao thức truyền thông nối tiếp, vì vậy dữ liệu được truyền từng bit dọc theo một đường duy nhất (đường SDA).
+
 I2C kết hợp các tính năng tốt nhất của SPI và UART. Giống như giao tiếp UART, I2C chỉ sử dụng hai dây để truyền dữ liệu giữa các thiết bị:
 
 - SDA (Serial Data) - đường truyền cho master và slave để gửi và nhận dữ liệu.
 
 - SCL (Serial Clock) - đường mang tín hiệu xung nhịp.
-
-I2C là một giao thức truyền thông nối tiếp, vì vậy dữ liệu được truyền từng bit dọc theo một đường duy nhất (đường SDA).
 
 Giống như SPI, I2C là đồng bộ, do đó đầu ra của các bit được đồng bộ hóa với việc lấy mẫu các bit bởi một tín hiệu xung nhịp được chia sẻ giữa master và slave. Tín hiệu xung nhịp luôn được điều khiển bởi master.
 
