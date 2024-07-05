@@ -633,7 +633,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 </details>
 <details><summary> LESSION 4 : SPI </summary>
   
-SPI – Serial Peripheral Interface – hay còn gọi là giao diện ngoại vi nối tiếp.
+SPI – Serial Peripheral Interface – hay còn gọi là một giao thức truyền thông nối tiếp đồng bộ .
 Chuẩn đồng bộ nối truyền dữ liệu ở chế độ full - duplex (hay gọi là "song công toàn phần". Nghĩa là tại 1 thời điểm có thể xảy ra đồng thời quá trình truyền và nhận. 
 
 Là giao tiếp đồng bộ, bất cứ quá trình nào cũng đều được đồng bộ với xung clock sinh ra bởi thiết bị Master  
