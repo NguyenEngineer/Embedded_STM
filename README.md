@@ -789,6 +789,31 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 ![image](https://github.com/phatminhswe/stm32/assets/162662273/f040dacf-b6ef-4dfb-9987-ee01cf133397)
 
 
+**Cấu hình I2C**
+
+            void I2C_Config(){
+            
+          	I2C_InitTypeDef I2C_InitStructure;
+          	I2C_InitStructure.I2C_ClockSpeed = 400000;               //Set the clock speed of I2C. (100kHz với slow mode và 400kHz với Fast mode)
+          	I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;              //I2C mode (2 chế độ Fast mode và slow mode)
+          	I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;       //I2C device adress:       I2C_DutyCycle_2: Thời gian xung thấp/ xung cao =2;
+                                                                                                I2C_DutyCycle_16_9: Thời gian xung thấp/ xung cao =16/9;
+
+                                                                                                I2C_DutyCycle_2: 
+                                                                                                      tLow/tHigh = 2 => tLow = 2tHigh.
+                                                                                                      100000khz, 1xung 10us 6.66us low, 3.33 high
+                                                                                                I2C_DutyCycle_16_9: 
+                                                                                                      tLow/tHigh = 16/9 => 9tLow = 16tHigh.
+
+
+          	I2C_InitStructure.I2C_OwnAddress1 = 0x33;                 //I2C Acknowladge configuration
+          	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;              //Cấu hình ACK, có sử dụng ACK hay không.
+          	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;        //Cấu hình số bit địa chỉ. 7 hoặc 10 bit
+           
+          	I2C_Init(I2C1, &I2C_InitStructure);
+          	I2C_Cmd(I2C1, ENABLE);
+          }
+
 
 
 
