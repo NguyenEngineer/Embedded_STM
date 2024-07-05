@@ -721,7 +721,8 @@ Giống như SPI, I2C là đồng bộ, do đó đầu ra của các bit đượ
 
 Với I2C, dữ liệu được truyền trong các tin nhắn. Tin nhắn được chia thành các khung dữ liệu. Mỗi tin nhắn có một khung địa chỉ chứa địa chỉ nhị phân của địa chỉ slave và một hoặc nhiều khung dữ liệu chứa dữ liệu đang được truyền. Thông điệp cũng bao gồm điều kiện khởi động và điều kiện dừng, các bit đọc / ghi và các bit ACK / NACK giữa mỗi khung dữ liệu:
 
-![image](https://github.com/phatminhswe/stm32/assets/162662273/0f8c73cc-caf2-4e3f-aa06-c618ea763aa2)
+![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/81339b43-9e2a-4278-921a-4b61eec75ce0)
+
 
 
 
