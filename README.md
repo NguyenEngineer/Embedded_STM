@@ -964,7 +964,43 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 - Rising: Kích hoạt khi trạng thái trên chân chuyển từ thấp lên cao.
 
 - Falling: Kích hoạt khi trạng thái trên chân chuyển từ cao xuống thấp.
+- 
+- Có 16 line ngắt (0,1,2,3,...,15) và mỗi line ngắt tương ứng với 1 GPIO.
+  
+  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/1e83af65-c4fd-40e0-9344-4b76a8768125)
 
+
+  Cấu hình:
+  
+- Cần bật thêm clock cho AFIO.
+
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+
+- Cấu hình GPIO:
+
+      void GPIO_Config(){
+        GPIO_InitTypeDef GPIOInitStruct;
+      	GPIOInitStruct.GPIO_Mode = GPIO_Mode_IPU;
+      	GPIOInitStruct.GPIO_Pin = GPIO_Pin_0;
+      	GPIOInitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+      	GPIO_Init(GPIOA, &GPIOInitStruct);
+      }
+
+- Cấu hình EXTI:
+
+        GPIO_EXTILineConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
+                    cấu hình chân ở chế độ sử dụng ngắt ngoài:
+                         GPIO_PortSource: Chọn Port để sử dụng làm nguồn cho ngắt ngoài.
+                         GPIO_PinSource: Chọn Pin để cấu hình.
+        EXTI_InitTypeDef  EXTIInitStruct;
+      	EXTIInitStruct.EXTI_Line = EXTI_Line0;        //Chọn line ngắt.
+      	EXTIInitStruct.EXTI_Mode = EXTI_Mode_Interrupt;    //Chọn Mode cho ngắt là Ngắt(thực thi hàm ngắt) hay Sự kiện(Không thực thi)
+      	EXTIInitStruct.EXTI_Trigger = EXTI_Trigger_Falling;    //Cấu hình cạnh ngắt.
+      	EXTIInitStruct.EXTI_LineCmd = ENABLE;        //Cho phép ngắt ở Line đã cấu hình
+      	
+      	EXTI_Init(&EXTIInitStruct);
+
+      
 **Ngắt timer:**
 
 - Ngắt Timer xảy ra khi giá trị trong thanh ghi đếm của timer tràn. Giá trị tràn được xác định bởi giá trị cụ thể trong thanh ghi đếm của timer.
