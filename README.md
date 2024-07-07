@@ -1009,7 +1009,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
         NVIC_Struct.NVIC_IRQChannelSubPriority = 0x00 ;    //Cấu hình độ ưu tiên phụ
         NVIC_Struct.NVIC_IRQChannelCmd = ENABLE ;    //Cho phép ngắt
 
-        ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/545cde82-e941-4f2b-93b1-83d8f5c56a69)
+  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/545cde82-e941-4f2b-93b1-83d8f5c56a69)
 
   NVIC_PriorityGroupConfig(); cấu hình các bit dành cho ChannelPreemptionPriority và ChannelSubPriority
 
@@ -1019,17 +1019,90 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
           1 bit dành cho ChannelPreemptionPriority thì 3 bit sẽ dành cho ChannelSubPriority
       
 
-       ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/eb929f1a-26d0-4d0a-b621-7899cec123a7)
+  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/eb929f1a-26d0-4d0a-b621-7899cec123a7)
+
+- Hàm phục vụ thực thi khi có ngắt:
+
+      void EXTIx_IRQHandler() {    //(x là line ngắt tương ứng). 
+         if( EXTI_GetITStatus(EXTI_Linex) ) {      // Kiểm tra cờ ngắt của line x tương ứng.
+              // do something 
+          }
+         EXTI_ClearITPendingBit(EXTI_Linex);        //Xóa cờ ngắt ở line x.
+      }
+
    
 **Ngắt timer:**
 
-- Ngắt Timer xảy ra khi giá trị trong thanh ghi đếm của timer tràn. Giá trị tràn được xác định bởi giá trị cụ thể trong thanh ghi đếm của timer.
+- Ngắt Timer xảy ra khi giá trị trong thanh ghi Period đếm của timer tràn. Giá trị tràn được xác định bởi giá trị cụ thể trong thanh ghi đếm của timer.
+  
 - Vì đây là ngắt nội trong MCU, nên phải reset giá trị thanh ghi timer để có thể tạo được ngắt tiếp theo.
+
+- Cấu hình:
+
+  B1: Cấu hình các tham số trong TIM_TimeBaseInitTypeDef bình thường, riêng TIM_Period, đây là số lần đếm mà sau đó timer sẽ ngắt.
+
+         TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE); // cấu hình kích hoạt ngắt cho TIMERx tương ứng.
+         TIM_Cmd(TIM2, ENABLE);
+
+  B2: Cấu hình tương tự như ngắt ngoài EXTI, tuy nhiên NVIC_IRQChannel được đổi thành TIM_IRQn để khớp với line ngắt timer
+
+        NVIC_InitTypeDef NVIC_InitStruct;
+        NVIC_InitStruct.NVIC_IRQChannel = TIM2_IRQn;  ///////// Cấu hình theo tương ứng
+      	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0x00;
+      	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0x00;
+      	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+      	NVIC_Init(&NVIC_InitStruct);
+
+- Hàm phục vụ thực thi khi có ngắt timer:
+
+        void TIMx_IRQHandler(){           // với x là timer tương ứng.
+            if(TIM_GetITStatus(TIM2, TIM_IT_Update)) {      //Kiểm tra cờ bằng hàm TIM_GetITStatus() Hàm này trả về giá trị kiểm tra xem timer đã tràn hay chưa.
+                                                            //TIM_IT_Update: Cờ báo tràn và update giá trị cho timer, cờ này bật lên mỗi 1ms.
+            }
+            TIM_ClearITPendingBit(TIMx, TIM_IT_Update);      //để xóa cờ này.
+
 
 
 **Ngắt theo các giao thức truyền thông:**
 
-- Ngắt truyền nhận xảy ra khi có sự kiện truyền/nhận dữ liệu giữ MCU với các thiết bị bên ngoài hay với MCU. Ngắt này sử dụng cho nhiều phương thức như Uart, SPI, I2C…v.v nhằm đảm bảo việc truyền nhận chính xác.
+- Ngắt truyền nhận xảy ra khi có sự kiện truyền/nhận dữ liệu giữ MCU với các thiết bị bên ngoài hay với MCU.
+
+- Ngắt này sử dụng cho nhiều phương thức như Uart, SPI, I2C…v.v nhằm đảm bảo việc truyền nhận chính xác.
+
+- Cấu hình:
+
+  B1: Cấu hình giao thức như bình thường. Vd UART ta cấu hình như bình thường. Và cho phép UART hoạt động, cần kích hoạt ngắt UART bằng cách gọi hàm:
+
+        USART_ITConfig();
+        USART_ClearFlag(USART1, USART_IT_RXNE);     //được gọi để xóa cờ ngắt ban đầu. Có 2 ngát là ngắt truyền (USART_IT_TXNE) và ngắt nhận (USART_IT_RXNE)
+  
+        USART_Init(USART1, &UART_InitStruct);      // sau đó khởi tạo như bình thường
+      	USART_Cmd(USART1, ENABLE);
+
+  B2: Cấu hình tương tự như ngắt ngoài EXTI, tuy nhiên NVIC_IRQChannel được đổi thành USART1_IRQn để khớp với line ngắt (tương tự như I2C và SPI)
+
+        NVIC_InitTypeDef NVIC_InitStruct;
+        NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQn;  ///////// Cấu hình theo tương ứng
+      	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0x00;
+      	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0x00;
+      	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+      	NVIC_Init(&NVIC_InitStruct);
+
+- Hàm phục vụ thực thi khi có ngắt timer:
+
+        void USART1_IRQHandler(){
+
+          while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE));      // hàm chờ khi nhận đủ data (có thể thay truyền data bằng (USART_FLAG_TXNE)
+        	if(USART_GetITStatus(USART1, USART_IT_RXNE)!=RESET){    //kiểm tra các cờ ngắt UART
+        		// do something
+        	}
+        	USART_ClearITPendingBit (USART1, USART_IT_RXNE);        //xóa cờ ngắt để đảm bảo không còn ngắt trên line (thông thường cờ ngắt sẽ tự động xóa).
+        }
+
+
+
+
+
 
 **Độ ưu tiên ngắt**
 
