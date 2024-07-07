@@ -953,6 +953,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 </details>
 <details><summary> LESSION 8: Ngắt ngoài, ngắt truyền thông (interrup)  </summary>
 
+
 **Ngắt ngoài: **
 
 - Xảy ra khi có thay đổi điện áp trên các chân GPIO được cấu hình làm ngõ vào ngắt.
@@ -970,7 +971,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
   ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/1e83af65-c4fd-40e0-9344-4b76a8768125)
 
 
-  Cấu hình:
+  *Cấu hình:
   
 - Cần bật thêm clock cho AFIO.
 
@@ -999,6 +1000,16 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
       	EXTIInitStruct.EXTI_LineCmd = ENABLE;        //Cho phép ngắt ở Line đã cấu hình
       	
       	EXTI_Init(&EXTIInitStruct);
+
+- Cần phải cấu hình bộ NVIC để quản lý các vector ngắt.
+
+        NVIC_InitTypeDef NVIC_Struct;
+        NVIC_Struct.NVIC_IRQChannel = EXTI1_IRQn;      // Cấu hình line ngắt tương ứng với ngắt đang sử dụng
+        NVIC_Struct.NVIC_IRQChannelPreemptionPriority      //Cấu hình độ ưu tiên của ngắt
+        NVIC_Struct.NVIC_IRQChannelSubPriority      //Cấu hình độ ưu tiên phụ
+        NVIC_Struct.NVIC_IRQChannelCmd      //Cho phép ngắt
+
+  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/545cde82-e941-4f2b-93b1-83d8f5c56a69)
 
       
 **Ngắt timer:**
