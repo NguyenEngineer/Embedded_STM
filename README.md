@@ -954,7 +954,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 <details><summary> LESSION 8: Ngắt ngoài, ngắt truyền thông (interrup)  </summary>
 
 
-**Ngắt ngoài: **
+# Ngắt ngoài:
 
 - Xảy ra khi có thay đổi điện áp trên các chân GPIO được cấu hình làm ngõ vào ngắt.
 
@@ -1031,7 +1031,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
       }
 
    
-**Ngắt timer:**
+# Ngắt timer:
 
 - Ngắt Timer xảy ra khi giá trị trong thanh ghi Period đếm của timer tràn. Giá trị tràn được xác định bởi giá trị cụ thể trong thanh ghi đếm của timer.
   
@@ -1063,7 +1063,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 
 
 
-**Ngắt theo các giao thức truyền thông:**
+# Ngắt theo các giao thức truyền thông:
 
 - Ngắt truyền nhận xảy ra khi có sự kiện truyền/nhận dữ liệu giữ MCU với các thiết bị bên ngoài hay với MCU.
 
