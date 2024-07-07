@@ -1005,13 +1005,22 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 
         NVIC_InitTypeDef NVIC_Struct;
         NVIC_Struct.NVIC_IRQChannel = EXTI1_IRQn;      // Cấu hình line ngắt tương ứng với ngắt đang sử dụng
-        NVIC_Struct.NVIC_IRQChannelPreemptionPriority      //Cấu hình độ ưu tiên của ngắt
-        NVIC_Struct.NVIC_IRQChannelSubPriority      //Cấu hình độ ưu tiên phụ
-        NVIC_Struct.NVIC_IRQChannelCmd      //Cho phép ngắt
+        NVIC_Struct.NVIC_IRQChannelPreemptionPriority = 0x00;     //Cấu hình độ ưu tiên của ngắt (số càng thấp độ ưu tiên càng cao)
+        NVIC_Struct.NVIC_IRQChannelSubPriority = 0x00 ;    //Cấu hình độ ưu tiên phụ
+        NVIC_Struct.NVIC_IRQChannelCmd = ENABLE ;    //Cho phép ngắt
 
-  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/545cde82-e941-4f2b-93b1-83d8f5c56a69)
+        ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/545cde82-e941-4f2b-93b1-83d8f5c56a69)
 
+  NVIC_PriorityGroupConfig(); cấu hình các bit dành cho ChannelPreemptionPriority và ChannelSubPriority
+
+  Có 4 bit dành để cấu hình 2  ChannelPreemptionPriority và ChannelSubPriority.
+
+      VD: 0 bit dành cho ChannelPreemptionPriority thì 4 bit sẽ dành cho ChannelSubPriority
+          1 bit dành cho ChannelPreemptionPriority thì 3 bit sẽ dành cho ChannelSubPriority
       
+
+       ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/eb929f1a-26d0-4d0a-b621-7899cec123a7)
+   
 **Ngắt timer:**
 
 - Ngắt Timer xảy ra khi giá trị trong thanh ghi đếm của timer tràn. Giá trị tràn được xác định bởi giá trị cụ thể trong thanh ghi đếm của timer.
