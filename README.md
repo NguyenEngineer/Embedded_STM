@@ -1122,7 +1122,26 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 </details>
 <details><summary> LESSION 9: ADC  </summary>
 
+- ADC (Analog-to-Digital Converter) là 1 mạch điện tử lấy điện áp tương tự làm đầu vào và chuyển đổi nó thành dữ liệu số (1 giá trị đại diện cho mức điện áp trong mã nhị phân).
 
+-  ADC hoạt động theo cách chia mức tín hiệu tương tự thành nhiều mức khác nhau. Các mức được biểu diễn bằng các bit nhị phân.
+
+-  Bằng việc so sánh giá trị điện áp mỗi lần lấy mẫu với 1 mức nhất định, ADC chuyển đổi tín hiệu tương tự và mã hóa các giá trị về giá trị nhị phân tương ứng
+
+![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/5ce40c56-9a67-40e5-b5d4-69b09191dbcb)
+
+- Khả năng chuyển đổi của ADC dựa vào 2 yếu tố chính:
+
+  + Độ phân giải: Số bit mà ADC sử dụng để mã hóa tín hiệu. Là số mức mà tín hiệu tương tự được biểu diễn. ADC có độ phân giải càng cao thì cho ra kết quả chuyển đổi càng chi tiết.
+                  STM32 có độ phân giải ADC là 12 bit.
+ 
+  + Tần số/chu kì lấy mẫu: là khái niệm được dùng để chỉ tốc độ lấy mẫu và số hóa của bộ chuyển đổi, thời gian giữa 2 lần số hóa càng ngắn độ chính xác càng cao.
+
+                           Được tính bằng : thời gian lấy mẫu tín hiệu + thời gian chuyển đổi.
+    
+                           Tần số lấy mẫu phải lớn hơn tần số của tín hiệu ít nhất 2 lần để đảm bảo độ chính xác khi khôi phục lại tín hiệu.
+    
+                           Tần số lấy mẫu = 1 / (thời gian lấy mẫu + Tg chuyển đổi)
 
 
 
