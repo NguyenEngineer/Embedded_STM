@@ -1133,22 +1133,68 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 - Khả năng chuyển đổi của ADC dựa vào 2 yếu tố chính:
 
   + Độ phân giải: Số bit mà ADC sử dụng để mã hóa tín hiệu. Là số mức mà tín hiệu tương tự được biểu diễn. ADC có độ phân giải càng cao thì cho ra kết quả chuyển đổi càng chi tiết.
+    
                   STM32 có độ phân giải ADC là 12 bit.
- 
+    
+                  Độ phân giải tùy thuộc vào VDK. VD: stm32 (12bit)  độ phân giải = 2^18 = 4096 giá trị ở ngõ ra số.
+    
+ ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/3d09d4b8-d558-47d1-8d7e-9028c340addc)
+
   + Tần số/chu kì lấy mẫu: là khái niệm được dùng để chỉ tốc độ lấy mẫu và số hóa của bộ chuyển đổi, thời gian giữa 2 lần số hóa càng ngắn độ chính xác càng cao.
 
                            Được tính bằng : thời gian lấy mẫu tín hiệu + thời gian chuyển đổi.
     
                            Tần số lấy mẫu phải lớn hơn tần số của tín hiệu ít nhất 2 lần để đảm bảo độ chính xác khi khôi phục lại tín hiệu.
-    
+ 
                            Tần số lấy mẫu = 1 / (thời gian lấy mẫu + Tg chuyển đổi)
+    
+![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/96cc2c01-6844-4ea4-bc4b-0bfe976fb93a)
 
+- STM32F103C8 có 2 bộ ADC đó là ADC1 và ADC2 với nhiều mode hoạt động
 
+        Độ phân giải 12 bit.
+  
+        Có các ngắt hỗ trợ và Có bộ DMA.
+  
+        Có thể điều khiển hoạt động ADC bằng xung Trigger.
+  
+        Thời gian chuyển đổi nhanh : 1us tại tần số 65Mhz.
 
+- Cấu hình ADC:
+  
+  + B1: cấp xung cho cả ADC để tạo tần số lấy mẫu tín hiệu và cấp xung cho GPIO của Port ngõ vào
 
+          void RCC_Config(){
+              	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA| RCC_APB2Periph_ADC1|RCC_APB2Periph_AFIO, ENABLE);
+              	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+              }
 
+  + B2: Cấu hình GPIO: chân GPIO dùng làm ngõ vào cho ADC sẽ được cấu hình Mode AIN.(Analogue Input).
+ 
+          void GPIO_Config(){
+              	GPIO_InitTypeDef GPIO_InitStruct;
+              	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AIN;
+              	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0;
+              	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+              	GPIO_Init(GPIOA, &GPIO_InitStruct);
+              }
 
-
+- Các chế độ đọc ADC:
+  
+  + Single: ADC chỉ đọc 1 kênh duy nhất, và chỉ đọc khi nào được yêu cầu.
+    
+  + Single Continuous: ADC sẽ đọc một kênh duy nhất, nhưng đọc dữ liệu nhiều lần liên tiếp (Có thể được biết đến như sử dụng DMA để đọc dữ liệu và ghi vào bộ nhớ).
+    
+  + Scan: Multi-Channels: Quét qua và đọc dữ liệu nhiều kênh, nhưng chỉ đọc khi nào được yêu cầu.
+    
+  + Scan: Continuous Multi-Channels Repeat: Quét qua và đọc dữ liệu nhiều kênh, nhưng đọc liên tiếp nhiều lần giống như Single Continous.
+    
+  Injected Conversion:
+  
+  + Trong trường hợp nhiều kênh hoạt động. Khi kênh có mức độ ưu tiên cao hơn có thể tạo ra một Injected Trigger.
+  
+  + Khi gặp Injected Trigger thì ngay lập tức kênh đang hoạt động bị ngưng lại để kênh được ưu tiên kia có thể hoạt động.
+  
 
 
 
