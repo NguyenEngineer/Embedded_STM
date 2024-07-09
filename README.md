@@ -1152,6 +1152,8 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 
 - STM32F103C8 có 2 bộ ADC đó là ADC1 và ADC2 với nhiều mode hoạt động
 
+        Thanh ghi chứ data là 16 bit
+  
         Độ phân giải 12 bit.
   
         Có các ngắt hỗ trợ và Có bộ DMA.
@@ -1178,6 +1180,36 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
               	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
               	GPIO_Init(GPIOA, &GPIO_InitStruct);
               }
+    
+  + B3: Cấu hình ADC:
+ 
+          void ADC_Config(){
+              	ADC_InitTypeDef ADC_InitStruct;
+              	
+              	ADC_InitStruct.ADC_Mode = ADC_Mode_Independent;        // Cấu hình các mode cho adc là đơn kênh(Independent) hay đa kênh,
+                                                                       //  ngoài ra còn có các chế độ ADC chuyển đổi tuần tự các kênh (regularly)
+                                                                       //  hay chuyển đổi khi có kích hoạt (injected)
+    
+              	ADC_InitStruct.ADC_NbrOfChannel = 1;                   // Số kênh hoạt động ADC 
+              	ADC_InitStruct.ADC_ScanConvMode = DISABLE;             // Bật / Tắt chế độ quét nhiều kênh
+              	ADC_InitStruct.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;    // Bật chế độ tín hiệu ưu tiên Injected Trigger.
+              	ADC_InitStruct.ADC_ContinuousConvMode = ENABLE;        // Bật / Tắt chế độ lấy dữ liệu liên tục (nếu tắt thì phải gọi lại lệnh đọc ADC để bắt đầu quá trình)
+              	ADC_InitStruct.ADC_DataAlign = ADC_DataAlign_Right;    // Cấu hình căn lề cho data. Vì bộ ADC xuất ra giá trị 12bit, được lưu vào biến 16 hoặc 32 bit nên phải căn lề các bit về trái hoặc phải.
+              	
+              	ADC_Init(ADC1, &ADC_InitStruct);
+              	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 1, ADC_SampleTime_55Cycles5);    //cấu hình thêm thời gian lấy mẫu, thứ tự kênh ADC khi quét
+                                                                                               //Rank: Ưu tiên của kênh ADC.
+                                                                                               // SampleTime: Thời gian lấy mẫu tín hiệu.
+ 
+              	ADC_Cmd(ADC1, ENABLE);
+              	ADC_SoftwareStartConvCmd(ADC1, ENABLE);              // Bắt đầu quá trình chuyển đổi
+              }
+
+- Các hàm thông dụng trong ADC:
+
+      ADC_GetConversionValue(ADC_TypeDef* ADCx): Đọc giá trị chuyển đổi được ở các kênh ADC tuần tự.
+  
+      ADC_GetDualModeConversionValue(void): Trả về giá trị chuyển đổi cuối cùng của ADC1, ADC2 ở chế độ kép.
 
 - Các chế độ đọc ADC:
   
@@ -1195,7 +1227,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
   
   + Khi gặp Injected Trigger thì ngay lập tức kênh đang hoạt động bị ngưng lại để kênh được ưu tiên kia có thể hoạt động.
   
-
+- 
 
 
 </details>
