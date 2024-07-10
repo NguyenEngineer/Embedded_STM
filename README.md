@@ -1226,8 +1226,31 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
   + Trong trường hợp nhiều kênh hoạt động. Khi kênh có mức độ ưu tiên cao hơn có thể tạo ra một Injected Trigger.
   
   + Khi gặp Injected Trigger thì ngay lập tức kênh đang hoạt động bị ngưng lại để kênh được ưu tiên kia có thể hoạt động.
+
   
-- 
+- Giá trị đo được trên ADC có thể bị nhiễu, vọt lố do nhiều lý do khách quan về phần cứng.  =>>> Sử dụng thuật toán lọc Kalman.
+
+- Bộ lọc Kalman là thuật toán sử dụng chuỗi các giá trị đo lường, bị ảnh hưởng bởi nhiễu hoặc sai số để ước đoán biến số nhằm tăng độ chính xác.
+
+        Áp dụng để tính toán cho giá trị đo được từ ADC.
+        Gọi hàm SimpleKalmanFilter(); Để khởi các giá trị sai số ước tính, sai số đo lường và sai số quá trình ban đầu.
+
+          SimpleKalmanFilter(1, 2, 0.001);  // thiết lập các giá trị sai số 
+        	while(1){
+        
+        			val = ADC_GetConversionValue(ADC1);
+        			
+        			valupdate = (float)updateEstimate((float)val);
+        		  Delay_Ms(100);
+        	}
+
+
+
+
+
+
+
+
 
 
 </details>
