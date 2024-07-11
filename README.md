@@ -850,13 +850,18 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 <details><summary> LESSION 4 : UART </summary>
 
 - Xác định baudrate: Vì uart ko có dây clock nên nó phải thống nhất với thiết bị truyền 1 baudrate nhất định.
+  
 - Baudrate là số đơn vị tín hiệu được truyền trên mỗi đơn vị thời gian cần thiết để biểu diễn các bit đó.
+  
 - Bitrate là số bit (tức là 0 và 1) được truyền trong mỗi đơn vị thời gian.
-                  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/cc1358d3-e800-46ca-ac4d-03e3e1e6e14f)
+  
+  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/cc1358d3-e800-46ca-ac4d-03e3e1e6e14f)
 
 -  Tính baudrate là trong khoảng thời gian Period đó sẽ xác định là 1 bit (0/1).
+  
 -  VD: baudrate = 9600 thì 1 bit sẽ được xác định trong khoảng 1 bit = 0.104 ms.
-                 ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/482e15c7-68a4-4fd7-9b82-a8e3739db75e)
+  
+  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/482e15c7-68a4-4fd7-9b82-a8e3739db75e)
 
 - Cấu hình:
                         
@@ -864,10 +869,16 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
                             GPIO_SetBits(UART_GPIO, TX_Pin);   //Baudrate = 9600bits/s >> 0.10467 ms for 1 bit = 104,67 us //=>> time delay ~~105 us
                             delay_us(1);
                        }
-- Hàm truyền:     - Tạo 1 bit start bằng cách kéo chân RX xuống mức 0, tạo 1 delay để xác nhận 1 bit.
-                  - Truyền 8 bit đi và mỗi bit sẽ được truyền trong khoảng 1 period time.
-                  - Dịch phải mỗi bít đã truyền.
-                  - Truyền bit stop bằng cách: kéo chân RX lên mức 1 trong 1 khoảng period time.
+  
+- Hàm truyền:
+  - Tạo 1 bit start bằng cách kéo chân RX xuống mức 0, tạo 1 delay để xác nhận 1 bit.
+    
+  - Truyền 8 bit đi và mỗi bit sẽ được truyền trong khoảng 1 period time.
+    
+  - Dịch phải mỗi bít đã truyền.
+    
+  - Truyền bit stop bằng cách: kéo chân RX lên mức 1 trong 1 khoảng period time.
+    
             VD:
 
                       void UART_Transmit(const char DataValue)
@@ -886,12 +897,18 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
                     	delay_us(BRateTime);
                     }
   
-- Hàm nhận:       - Chờ tín hiệu start từ thiết bị gửi ( thiết bị nhận sẽ nhận đc 1 tín hiệu mức 0 để biết bit Start ), tạo 1 delay bằng với period time.
-                  - Sau khi nhận đc bit start thì phải delay thêm (1.5 x period time) để chống nhiễu ( 1 --> 0)
-                  - Đọc 8 bit và mỗi bit sẽ được ghi vào biến lưu.
-                  - Dịch mỗi bit đã nhận.
-                  - Truyền bit stop bằng cách: kéo chân RX lên mức 1 trong 1 khoảng period time.
-          ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/ec85e433-4014-4def-b0d2-03b1caef44da)
+- Hàm nhận:
+  - Chờ tín hiệu start từ thiết bị gửi ( thiết bị nhận sẽ nhận đc 1 tín hiệu mức 0 để biết bit Start ), tạo 1 delay bằng với period time.
+  
+  - Sau khi nhận đc bit start thì phải delay thêm (1.5 x period time) để chống nhiễu ( 1 --> 0)
+  
+  - Đọc 8 bit và mỗi bit sẽ được ghi vào biến lưu.
+    
+  - Dịch mỗi bit đã nhận.
+  
+  - Truyền bit stop bằng cách: kéo chân RX lên mức 1 trong 1 khoảng period time.
+    
+  ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/ec85e433-4014-4def-b0d2-03b1caef44da)
 
             VD:
 
@@ -913,21 +930,36 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
                         	} 
                        }
   
-- Hàm kiểm tra cờ:   Hàm USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG) trả về trạng thái cờ USART_FLAG tương ứng:
-                          USART_FLAG_TXE: Cờ truyền, set lên 1 nếu quá trình truyền hoàn tất.
-                          USART_FLAG_RXNE: Cờ nhận, set lên 1 nếu quá trình nhận hoàn tất.
-                          USART_FLAG_IDLE: Cờ báo đường truyền đang ở chế độ Idle.
-                          USART_FLAG_PE: Cờ báo lỗi Parity.
+- Hàm kiểm tra cờ:
+  Hàm USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG) trả về trạng thái cờ USART_FLAG tương ứng:
   
-- Cấu hình:         -Struct USART_InitTypeDef:
-                 - USART_Mode: Cấu hình chế độ hoạt động cho UART:
-                 - USART_Mode_Tx: Cấu hình truyền.
-                 - USART_Mode_Rx: Cấu hình nhận.     // Có thể cấu hình cả 2 cùng lúc (song công).
-                 - USART_BaudRate: Cấu hình tốc độ baudrate cho uart.
-                 - USART_HardwareFlowControl: Cấu hình chế độ bắt tay cho uart.
-                 - USART_WordLength: Cấu hình số bit mỗi lần truyền.
-                 - USART_StopBits: Cấu hình số lượng stopbits.
-                 - USART_Parity: cấu hình bit kiểm tra chẳn, lẻ.
+      -  USART_FLAG_TXE: Cờ truyền, set lên 1 nếu quá trình truyền hoàn tất.
+  
+      -  USART_FLAG_RXNE: Cờ nhận, set lên 1 nếu quá trình nhận hoàn tất.
+
+      -  USART_FLAG_IDLE: Cờ báo đường truyền đang ở chế độ Idle.
+  
+      -  USART_FLAG_PE: Cờ báo lỗi Parity.
+  
+- Cấu hình:
+  - Struct USART_InitTypeDef:
+    
+    - USART_Mode: Cấu hình chế độ hoạt động cho UART:
+      
+    - USART_Mode_Tx: Cấu hình truyền.
+      
+    - USART_Mode_Rx: Cấu hình nhận.     // Có thể cấu hình cả 2 cùng lúc (song công).
+     
+    - USART_BaudRate: Cấu hình tốc độ baudrate cho uart.
+      
+    - USART_HardwareFlowControl: Cấu hình chế độ bắt tay cho uart.
+      
+    - USART_WordLength: Cấu hình số bit mỗi lần truyền.
+      
+    - USART_StopBits: Cấu hình số lượng stopbits.
+      
+    - USART_Parity: cấu hình bit kiểm tra chẳn, lẻ.
+      
         VD:
   
                     void UART_Config(){
