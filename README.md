@@ -348,20 +348,42 @@ GPIO_EventOutputConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
 
 - Ngắt là 1 sự kiện khẩn cấp xảy ra trong hay ngoài vi điều khiển. Nó yêu MCU phải dừng chương trình chính và thực thi chương trình ngắt.
 
-**Các loại ngắt thông dụng**
-
 - Mỗi ngắt có 1 trình phục vụ ngắt, sẽ yêu cầu MCU thực thi lệnh tại trình phục vụ ngắt khi có ngắt xảy ra.
+
 - Các ngắt có các địa chỉ cố định trong bộ nhớ để giữ các trình phục vụ. Các địa chỉ này gọi là vector ngắt.
 
 ![image](https://github.com/phatminhswe/stm32/assets/162662273/3f0b8c5f-deab-4e8d-b7f1-24f1b228fc53)
 
 
-Quá trình ngắt:
+
+Quá trình thực thi ngắt:
 
 ![image](https://github.com/phatminhswe/stm32/assets/162662273/031f2525-dfff-424c-a313-efa6726625d5)
 
-- Khi đang chạy trong chương trình chính nếu có ngắt sảy ra thì con trỏ PC sẽ lưu địa chỉ của câu lệnh đang thực thi
-- Xong rồi nhảy tới ngắt để thực thi
+- B1: Xử lý xong câu lệnh đang chạy. (Quá trình thực thi câu lệnh mã máy qua các bước: lấy lệnh từ bộ nhớ FLASH, giải mã lệnh, thực thi lệnh)
+
+- B2: Lưu địa chỉ câu lệnh tiếp theo, lưu trạng thái hoạt động của VDK (các cờ, trạng thái năng lượng) vào vùng nhớ STACK.
+
+- B3: VDK tắt bit ngắt toàn cục để ngăn chặn các ngắt khác can thiệp trong khi xử lý ngắt hiện tại. Nếu vi điều khiển đang ở chế độ tiết kiệm năng lượng, nó sẽ chuyển sang chế độ hoạt động bình thường.
+
+      Cho phép ngắt chồng ngắt (Nested Interrupt): Bit cho phép ngắt có thể được bật lại để cho phép ngắt chồng ngắt nếu cần thiết
+
+- B4: Thực thi ngắt bằng cách Vi điều khiển nạp địa chỉ của chương trình phục vụ ngắt (Interrupt Service Routine - ISR) từ bảng vectơ ngắt vào thanh ghi PC.
+
+- B5: Thực thi xong sẽ thực hiện quá trình phục hồi ngữ cảnh (unstacking).
+
+      Nạp lại giá trị PC: Vi điều khiển nạp lại giá trị của PC từ Stack để tiếp tục thực hiện lệnh tiếp theo trong chương trình chính.
+
+      Bật lại bit ngắt và Quay về trạng thái năng lượng ban đầu: Nếu vi điều khiển đã chuyển từ chế độ tiết kiệm năng lượng sang chế độ hoạt động bình thường, nó sẽ quay lại chế độ tiết kiệm năng lượng.
+
+
+Nếu có nhiều ngắt xảy ra thì VDK sẽ dựa vào mức độ ưu tiên ngắt (số càng nhỏ mức ưu tiên càng cao) để thực thi theo thứ tự. Nếu ngắt có cùng độ ưu tiên thì VDK sẽ xet theo
+
+
+
+
+
+**Các loại ngắt thông dụng**
 
 **Ngắt ngoài: **
 
