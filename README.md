@@ -1190,7 +1190,7 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 
 - Khả năng chuyển đổi của ADC dựa vào 2 yếu tố chính:
 
-  + Độ phân giải: Số bit mà ADC sử dụng để mã hóa tín hiệu. Là số mức mà tín hiệu tương tự được biểu diễn. ADC có độ phân giải càng cao thì cho ra kết quả chuyển đổi càng chi tiết.
+  + Độ phân giải (resolution): Số bit mà ADC sử dụng để mã hóa tín hiệu. Là số mức mà tín hiệu tương tự được biểu diễn. ADC có độ phân giải càng cao thì cho ra kết quả chuyển đổi càng chi tiết.
     
                   STM32 có độ phân giải ADC là 12 bit.
     
