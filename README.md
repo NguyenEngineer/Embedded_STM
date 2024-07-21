@@ -1119,7 +1119,15 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
             }
             TIM_ClearITPendingBit(TIMx, TIM_IT_Update);      //để xóa cờ này.
 
-
+- Các bước hoạt động của tỉmer:
+  
+      - cấp xung cho timer
+      - bộ chia timer (precaler): mục đích là timer ko cần clock quá lớn nên cần bộ chia nhỏ f lại
+      - Setup số lần đếm tràn (Arr)
+      - Cấu hình các vector ngắt timer
+      - Kích hoạt ngắt timer
+      - Hoạt động: sau khi bộ đếm timer tràn thì sinh ra ngắt, và thực thi hàm ngắt tỉmer đó
+      - Xử lý xong thì reset bộ đếm timer để đếm lại về 0
 
 # Ngắt theo các giao thức truyền thông:
 
