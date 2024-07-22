@@ -1595,7 +1595,32 @@ VD: hàm chính
   
           VD: CAN Low speed RECESSIVE (bit 1): CAN_H (3.25V) - CAN_L (1.75) thì sảy ra nhiễu thì giá trị điện áp tăng lên trên cả 2 dây CAN_H (3.5V) - CAN_L (2V) = 1.5 =>  đúng số qui định bit 1 của CAN Low speed.
 
+- Nguyên tắc hoạt động:
   
+  + CAN có nhiều note khác nhau và có ID riêng biệt, mỗi note đều có thể truyền hoặc nhận data.
+  
+  + Giống như I2c MCU sẽ truyền đi dữ liệu trên đường bus và nội dung của thông điệp được gắn bởi số nhận dạng (ID) là duy nhất trên toàn mạng
+ 
+  + Tất cả các note trên mạng đều nhận được thông điệp và mỗi nút thực hiện kiểm tra sự chấp nhận trên mã ID để xác định xem thông điệp có liên quan đến nút đó hay không. Nếu thông điệp có liên quan, nó sẽ được xử lý, nếu không thì nó bị bỏ qua.
+
+ ![image](https://github.com/user-attachments/assets/6b87e06d-0a3d-419d-b21c-9b7e74cea16d)
+
+  + Giao thức CAN cho phép các nút khác nhau gửi dữ liệu cùng lúc. Một mạng Can có thể gồm nhiều node với lượng dữ liệu truyền lên Bus rất lớn. Chỉ 1 node được phép truyền tại 1 thời điểm.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </details>
 <details><summary> LESSION: V--Model </summary>
 
