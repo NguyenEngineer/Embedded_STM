@@ -1535,7 +1535,46 @@ VD: hàm chính
 
 
 
+</details>
+<details><summary> LESSION 12 : CAN Protocol </summary>
 
+- CAN (Controller Area Network) là giao thức giao tiếp nối tiếp hộ trợ những hệ thống điều khiển thời gian thực.
+  
+- Cấu tạo gồm 2 dây tín hiệu ( CAN HIGH và CAN LOW)
+
+- Sự truyền dữ liệu thực hiện nhờ tính toán vi sai trên cặp dây truyền tín hiệu, có nghĩa là chúng ta đo sự chênh lệch điện áp giữa CAN_H và CAN L.
+
+![image](https://github.com/user-attachments/assets/ea42b3a4-e4c0-4ef8-a24f-990263ad5b68)
+
+- Mạng CAN được tạo thành những note khác nhau và trong 1 note bao gồm:
+
+      + Một thiết bị hỗ trợ xử lý điện áp trên bus - CAN Transceiver.
+  
+      + Một MCU hỗ trợ Can Controller, chính là giao thức CAN. MCU ngoài việc nhận và xử lý data còn thực hiện chức năng của node.
+
+- CAN Transceiver
+
+  ![image](https://github.com/user-attachments/assets/88b9bceb-0697-4098-b181-fed142341c47)
+
+
+  + MCU có nhiệm vụ truyền và nhận data. Khi truyền thì sẽ ra 2 mức điện áp đối nghịch với nhau (VD: CAN_H là 3v3 thì CAN_L là ~3v3).
+
+  + Khi truyền đi data gì thì MCU cũng nhận về giá trị giống như mà MCU đã truyền đi thông qua bộ so sánh
+
+
+- Giao thức CAN không có đại diện truyền đi bit 0 (0v) hoặc 1 (3v3) như các giao thức khác .
+  
+- Để xác định khi nào CAN ra mức 1 hoặc 0 thì sẽ có 2 trạng thái DOMINANT và RECESSIVE
+
+  + DOMINANT: 
+
+
+
+
+
+
+
+  
 </details>
 <details><summary> LESSION: V--Model </summary>
 
