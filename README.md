@@ -1605,7 +1605,14 @@ VD: hàm chính
 
  ![image](https://github.com/user-attachments/assets/6b87e06d-0a3d-419d-b21c-9b7e74cea16d)
 
+- Giải quyết tranh chấp trên bus CAN:
+  
   + Giao thức CAN cho phép các nút khác nhau gửi dữ liệu cùng lúc. Một mạng Can có thể gồm nhiều node với lượng dữ liệu truyền lên Bus rất lớn. Chỉ 1 node được phép truyền tại 1 thời điểm.
+
+  + Data Frame và Remote Frame làm việc theo cơ chế phân xử quyền ưu tiên của tín hiệu. Phân xử theo ID của các note.
+ 
+  + Bit ID có giá trị 0 sẽ được ưu tiên hơn
+
 
 
 
