@@ -1564,15 +1564,36 @@ VD: hàm chính
 
 - Giao thức CAN không có đại diện truyền đi bit 0 (0v) hoặc 1 (3v3) như các giao thức khác .
   
-- Để xác định khi nào CAN ra mức 1 hoặc 0 thì sẽ có 2 trạng thái DOMINANT và RECESSIVE
+- Để xác định khi nào CAN ra mức 1 hoặc 0 thì sẽ có 2 trạng thái DOMINANT (bit 0) và RECESSIVE (bit 1).
 
-  + DOMINANT: 
+- CAN có 2 loại là CAN low speed và CAN high speed:
+
+  + CAN Low speed:
+
+    ![image](https://github.com/user-attachments/assets/446cc748-42bd-4c5e-8464-bd9d3590d4ae)
+
+    - DOMINANT (bit 0) : CAN_H (4V) - CAN_L (1V) = 3V. (Để xác đinh mức 0 ở CAN low speed thì 2 bus CAN_H và CAN_L phải có sự chênh lệch với nhau là 3V).
+  
+    - RECESSIVE (bit 1): CAN_H (3.25V) - CAN_L (1.75) = 1.5V. (Để xác đinh mức 1 ở CAN low speed thì 2 bus CAN_H và CAN_L phải có sự chênh lệch với nhau là 1.5V).
+
+  + CAN High speed:
+ 
+    ![image](https://github.com/user-attachments/assets/5cb372b6-007e-4c11-8901-90fa584396bc)
+
+    - DOMINANT (bit 0) : CAN_H (3.5V) - CAN_L (1.5) = 2V. (Để xác đinh mức 0 ở CAN low speed thì 2 bus CAN_H và CAN_L phải có sự chênh lệch với nhau là 2V).
+  
+    - RECESSIVE (bit 1): CAN_H (2.5V) - CAN_L (2.5) = 0V. (Để xác đinh mức 1 ở CAN low speed thì 2 bus CAN_H và CAN_L phải có sự chênh lệch với nhau là 0V).
 
 
+ - Tính chất chống nhiễu của CAN:
 
+   + Khi nhiễu xảy ra trên 1 trong 2 dây của CAN thì sẽ gây ra sự chênh lệch điện áp làm sai số.
+   
+          VD: CAN Low speed RECESSIVE (bit 1): CAN_H (3.25V) - CAN_L (1.75) thì sảy ra nhiễu thì giá trị điện áp tăng lên tên dây CAN_H (3.5V) - CAN_L (1.75V) = 1.75 => sai số qui định bit 1 của CAN Low speed.
 
-
-
+   + Để khắc phục thì ta xoắn 2 dây CAN_H và CAN_L vào nhau để khi nhiễu xảy ra thì sẽ đều tác động lên 2 dây và khi bù trừ sẽ ko bị chênh lệch điện áp.
+  
+          VD: CAN Low speed RECESSIVE (bit 1): CAN_H (3.25V) - CAN_L (1.75) thì sảy ra nhiễu thì giá trị điện áp tăng lên trên cả 2 dây CAN_H (3.5V) - CAN_L (2V) = 1.5 =>  đúng số qui định bit 1 của CAN Low speed.
 
   
 </details>
