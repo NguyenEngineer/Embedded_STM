@@ -1627,9 +1627,12 @@ VD: hàm chính
 
         Data frame dùng khi node muốn truyền dữ liệu tới các node khác
 
-        Remote frame dùng để yêu cầu truyền data frame. 
+        Remote frame dùng để yêu cầu truyền data frame. (1 Remote Frame tương tự Data frame, tuy nhiên Remote Frame có Bit RTR =1 và không có trường data (Bit DLC =0)).
 
-        Error frame và overload frame dùng trong việc xử lý lỗi
+        Error frame ( có 6-12 bit Cờ lỗi và 8 bit hết lỗi Phần delimiter) và Overload frame (dùng khi node bị tràn bộ đệm) dùng trong việc xử lý lỗi.
+
+![image](https://github.com/user-attachments/assets/3d8916f4-1bdc-4ed6-a491-62ba9db0bde9)
+
   
 ![image](https://github.com/user-attachments/assets/98ac13b9-f1ed-4b2d-b25c-8aa4b19a0183)
 
