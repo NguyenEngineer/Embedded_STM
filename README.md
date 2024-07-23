@@ -1709,7 +1709,26 @@ VD: hàm chính
 
 ## Lập trình CAN
 
+- Gồm 2 dây CAN_H và CAN_L, gọi là bus.
+  
+- Mỗi thiết bị trong mạng được gọi là 1 Node, gồm:
+  
+  + Vi điều khiển: Chịu trách nhiệm truyền nhận xử lý data.
+    
+  + CAN Controller: Thực hiện chức năng của giao thức CAN.
+    
+  + CAN Transceiver: Giúp tạo điện áp cho Bus.
 
+![image](https://github.com/user-attachments/assets/92d8ca9b-72cb-4078-bb45-5b33d77abb7d)
+
+- Cấu hình:
+
+  B1: Cấp xung clock CAN được cấp xung từ APB1.
+
+  B2: Cấu hình cho 2 chân TX và RX của bộ CAN.
+  
+      RX: Mode In_Floating.
+      TX: Mode AF_PP.
 
 
 </details>
