@@ -1442,33 +1442,51 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 
 </details>
 <details><summary> LESSION 11 : Flash and Bootloader </summary>
+  
 ## Flash
+
 - Khi mất nguồn toàn bộ dữ liệu đang hoạt động của VDK sẽ mất đi. Nên ta phải lưu vào bộ nhớ Flash và Eprom
 
   ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/1dce2e76-4bb9-46e8-a215-32b8c84be62d)
-- Flash là bộ nhớ lưu trữ dữ liệu chương trình mà khi mất nguồn thì ko mất dữ liệu. 
+  
+- Flash là bộ nhớ lưu trữ dữ liệu chương trình mà khi mất nguồn thì ko mất dữ liệu.
+  
 - Eprom là giống flash nhưng là chip mở rộng hơn để lưu trữ.
 
 ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/16dd9910-1180-40af-af1a-7f0f76ca4a0d)
+
 - Tùy vào kiến trúc VDK mà kích thướbộ nhớ Flash có thể lưu được.               VD: STM32F103 có 128/64Kb Flash
+  
 - Flash được chia nhỏ ra thành mỗi PAGE, 1 PAGE có kích thước 1KB.              VD: STM32F103 có 128/64Kb Flash -> thì sẽ có 127 page (0 -> 127)
+  
 - 1 Bank gồm nhiều các PAGE.                                                    VD: 1 Bank gồm có 16 Page.
+  
 - Flash phải được xóa đặt về 0 trước khi lưu dữ liệu mới
   
 ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/a7c40dda-df66-4b59-a9b9-3deb2d5aec0b)
+
 - Thông thường chương trình sẽ được nạp vào vùng nhớ bắt đầu ở 0x08000000
+  
 - Vùng nhớ phía sau sẽ là trống và người dùng có thể lưu trữ dữ liệu ở vùng này.
 
 Qui trình hoạt động của flash
 
 ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/1d5c05bf-442c-4658-bbcf-dd20ef26f7dc)
+
 - Mỗi lần ghi 2bytes hoặc 4bytes, tuy nhiên mỗi lần xóa phải xóa cả Page.
+  
 - Sơ đồ xóa FLash như hình:
-       + Đầu tiên, kiểm tra cờ LOCK của Flash, nếu Cờ này đang được bật, Flash đang ở chế độ Lock và cần phải được Unlock trước khi sử dụng.
-       + Sau khi FLash đã Unlock, cờ CR_PER được set lên 1.
-       + Địa chỉ của Page cần xóa được ghi vào FAR.
-       + Set bit CR_STRT lên 1 để bắt đầu quá trình xóa.
-       + Kiểm tra cờ BSY đợi haonf tất quá trình xóa.
+  
+   + Đầu tiên, kiểm tra cờ LOCK của Flash, nếu Cờ này đang được bật, Flash đang ở chế độ Lock và cần phải được Unlock trước khi sử dụng.
+
+   + Sau khi FLash đã Unlock, cờ CR_PER được set lên 1.
+
+   + Địa chỉ của Page cần xóa được ghi vào FAR.
+  
+   + Set bit CR_STRT lên 1 để bắt đầu quá trình xóa.
+  
+   + Kiểm tra cờ BSY đợi haonf tất quá trình xóa.
+  
 - Các hàm sử dụng trong flash:
 
         Các hàm LOCK, UNLOCK Flash:
@@ -1491,6 +1509,7 @@ Qui trình hoạt động của flash
         FlagStatus FLASH_GetFlagStatus(uint32_t FLASH_FLAG): hàm này trả về trạng thái của Flag. Ở bài này ta sẽ dùng hàm này để kiểm tra cờ FLASH_FLAG_BSY. Cờ này báo hiệu rằng Flash đang bận (Xóa/Ghi) nếu được set lên 1. 
 
 - Code mẫu các hàm:
+  
    + Hàm xóa 1 Page flash:
      
                 void Flash_Erase(uint32_t addresspage){                // truyền vào địa chỉ của 1 page flash
@@ -1537,6 +1556,8 @@ VD: hàm chính
 
 </details>
 <details><summary> LESSION 12 : CAN Protocol </summary>
+
+## Lý thuyết
 
 - CAN (Controller Area Network) là giao thức giao tiếp nối tiếp hộ trợ những hệ thống điều khiển thời gian thực.
   
@@ -1686,7 +1707,7 @@ VD: hàm chính
     
   + Trường kết thúc (End of Frame Field - EOF) : bit thông báo kết thúc một Data Frame hay Remote Frame. Trường này gồm 7 bit Recessive (bit 1).
 
-
+## Lập trình CAN
 
 
 
