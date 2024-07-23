@@ -1655,15 +1655,33 @@ VD: hàm chính
 
   + Trường điều khiển (control Field) : Cũng gồm 2 dạng như Arbitration Field:
 
-       - Khung chuẩn : gồm IDE, r0 và DLC (Data Length Code).
+    - Khung chuẩn : gồm IDE, r0 và DLC (Data Length Code).
 
-       - Khung mở rộng  : gồm r1, r0 và DLC.
+    - Khung mở rộng  : gồm r1, r0 và DLC.
 
-              r0 và r1 (2 bit dự trữ) : phải được truyền là recessive (bit 1) bởi bộ truyền, bộ nhận ko cần 2 bit này.
+          r0 và r1 (2 bit dự trữ) : phải được truyền là recessive (bit 1) bởi bộ truyền, bộ nhận ko cần 2 bit này.
     
-              DLC (Data Length Code) : có độ dài 4 bit, chỉ được mang giá trị từ 0 đến 8.
+          DLC (Data Length Code) : có độ dài 4 bit, nó chỉ định số byte được mang đi và chỉ được mang giá trị từ 0 đến 8.
 
-  + Trường dữ liệu (Data Frame) 
+  + Trường dữ liệu (Data Frame) : chứa data, có độ dài từ 0 đến 8 byte tùy vào giá trị của DLC ở trường điều khiển. (DLC = 4 thì data chứa 4 byte, DLC = 8 thì data chứa 8 byte)
+
+  + Trường kiểm tra (Cyclic Redundancy Check Field – CRC) : gồm 16 bit được chia làm 2 phần:
+
+    ![image](https://github.com/user-attachments/assets/54429375-2fa9-42d3-a8db-efdf90720cf8)
+
+    - CRC Sequence: gồm 15 bit tuần tự
+    
+    - CRC Delimiter : là một recesive (bit 1) có nhiệm vụ phân cách trường CRC với trường phía sau.
+    
+  + Trường xác nhận (Acknowledge Field - ACK) : có 2 bit và gồm 2 phần:
+    
+    - ACK Slot: có độ dài 1 bit recesive (bit 1)
+   
+      Khi 1 hoặc nhiều note nhận chính xác giá trị frame (ko có lỗi và đã so sánh trùng khớp với CRC Sequece) thì nó sẽ báo lại cho bộ truyền 1 bit dominant (bit 0)
+
+    - ACK Delimiter : dài 1 bit và luôn là một recesive (bit 1) có nhiệm vụ phân cách trường CRC với trường phía sau.
+    
+  + Trường kết thúc (End of Frame Field - EOF) : bit thông báo kết thúc một Data Frame hay Remote Frame. Trường này gồm 7 bit Recessive (bit 1).
 
 
 
