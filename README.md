@@ -1606,22 +1606,64 @@ VD: hàm chính
  ![image](https://github.com/user-attachments/assets/6b87e06d-0a3d-419d-b21c-9b7e74cea16d)
 
 - Giải quyết tranh chấp trên bus CAN:
+
+  ![image](https://github.com/user-attachments/assets/02702279-ca99-490e-8381-dd385c8309e8)
   
   + Giao thức CAN cho phép các nút khác nhau gửi dữ liệu cùng lúc. Một mạng Can có thể gồm nhiều node với lượng dữ liệu truyền lên Bus rất lớn. Chỉ 1 node được phép truyền tại 1 thời điểm.
 
-  + Data Frame và Remote Frame làm việc theo cơ chế phân xử quyền ưu tiên của tín hiệu. Phân xử theo ID của các note.
+  + Data Frame và Remote Frame làm việc theo cơ chế phân xử quyền ưu tiên của tín hiệu. Phân xử chỉ theo ID của các note.
  
-  + Bit ID có giá trị 0 sẽ được ưu tiên hơn
+  + Bit ID có giá trị 0 sẽ được ưu tiên hơn.
+
+         VD:  Như hình trên có 3 note đang truyền đi các bit ID. Thì nó sẽ phân xử theo cách so sánh các bit ID của các Note với nhau.
+    
+              Note 1 và 3 đang ở bit 0 thì 2 bit này có cùng độ ưu tiên nên tiếp tục so sánh cho đến khi 1 trong 2 Note có bit 1, và Note cuối cùng có bit 0 thì sẽ được xử lý trước sau đó tới các Note còn lại.
+    
+              Note 2 thì đang ở bit 1 thì sẽ vào chế độ chờ và sẽ được xử lý sau.
+
+- DATA FRAME:
+
+  + CAN có 4 loại FRAME:
+
+        Data frame dùng khi node muốn truyền dữ liệu tới các node khác
+
+        Remote frame dùng để yêu cầu truyền data frame. 
+
+        Error frame và overload frame dùng trong việc xử lý lỗi
+  
+![image](https://github.com/user-attachments/assets/98ac13b9-f1ed-4b2d-b25c-8aa4b19a0183)
 
 
+  + Trường bắt đầu (Start Of Frame Field - SOF) : Trường này mang giá trị Dominant (bit 0) để báo hiệu bắt đầu truyền frame.
+
+  + Trường xác định quyền ưu tiên (Arbitration Field) : Trường này định dạng vùng xác định quyền ưu tiên.
+
+    ![image](https://github.com/user-attachments/assets/637046c9-9e3e-43c8-b2c1-962ace912070)
+
+    - Định dạng chuẩn: vùng này có độ dài 12 bit trong đó có 11 bit ID và 1 bit RTR.
+   
+    - Định dạng mở rộng: vùng này có độ dài 32 bit trong đó có 29 bit ID, 1 bit SRR , 1 bit IDE và 1 bit RTR.
 
 
+          Bit RTR (Remote Transmission Request): dùng để phân biệt khung là Data Frame hay Remote Frame (0- Data frame, 1- Remote frame).
+      
+          Bit SRR (Substitute Remote Request): chỉ có ở khung mở rộng, có giá trị là 1.
+      
+          Bit IDE (Identifier Extension): bit phân biệt khung chuẩn và khung mở rộng: IDE = 0 (khung chuẩn), IDE = 1 (khung mở rộng).
+      
+          Bit này nằm ở trường xác định quyền ưu tiên với khung mở rộng và ở trường điều khiển với khung chuẩn.
 
+  + Trường điều khiển (control Field) : Cũng gồm 2 dạng như Arbitration Field:
 
+       - Khung chuẩn : gồm IDE, r0 và DLC (Data Length Code).
 
+       - Khung mở rộng  : gồm r1, r0 và DLC.
 
+              r0 và r1 (2 bit dự trữ) : phải được truyền là recessive (bit 1) bởi bộ truyền, bộ nhận ko cần 2 bit này.
+    
+              DLC (Data Length Code) : có độ dài 4 bit, chỉ được mang giá trị từ 0 đến 8.
 
-
+  + Trường dữ liệu (Data Frame) 
 
 
 
