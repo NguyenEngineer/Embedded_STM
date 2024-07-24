@@ -1730,6 +1730,102 @@ VD: hàm chính
       RX: Mode In_Floating.
       TX: Mode AF_PP.
 
+  B3: Cấu hình thông số CAN:
+
+      	CAN_InitTypeDef CAN_InitStruct;
+	
+      	CAN_InitStruct.CAN_TTCM = DISABLE;
+      	CAN_InitStruct.CAN_ABOM = DISABLE;
+      	CAN_InitStruct.CAN_AWUM = DISABLE;
+      	CAN_InitStruct.CAN_NART = ENABLE;
+      	CAN_InitStruct.CAN_RFLM = DISABLE;
+      	CAN_InitStruct.CAN_TXFP = ENABLE;
+      	
+      	CAN_InitStruct.CAN_Mode = CAN_Mode_Normal;
+      	
+      	CAN_InitStruct.CAN_Prescaler = 1;
+      	CAN_InitStruct.CAN_SJW = 1;
+      	CAN_InitStruct.CAN_BS1 = 1;
+      	CAN_InitStruct.CAN_BS2 = 1;
+      	
+      	CAN_Init(CAN1, &CAN_InitStruct);
+
+    + Giải thích các thông số:
+
+      - CAN_TTCM: Chế độ giao tiếp được kích hoạt theo thời gian Ấn đinh khoảng thời gian khi truyền message.
+
+      - CAN_ABOM: Quản lý ngắt bus tự động. Nếu trong quá trình truyền xảy ra lỗi, bus sẽ được ngắt. Bit này quy định việc CAN có quay về trạng thái bình thường hay không
+
+      - CAN_AWUM: Chế độ đánh thức tự động. Nếu CAN hoạt động ở SleepMode, Bit này quy định việc đánh thức CAN theo cách thủ công hay tự động.
+     
+      - CAN_NART: CAN sẽ thử lại để truyền tin nhắn nếu các lần thử trước đó không thành công. Nếu set bit = 1 thì sẽ không truyền lại. Nên set bit khi sử dụng chung với CAN_TTCM, nếu không thì nên để =0.
+     
+      - CAN_RFLM: Chế độ khóa nhận FIFO. Chế độ khóa bộ đệm khi đầy.
+     
+      - CAN_TXFP: Ưu tiên truyền FIFO. Đặt bit này =1, ưu tiên truyền các gói có ID thấp hơn. Nếu đặt lên 0, CAN sẽ ưu tiên các gói theo thứ tự trong bộ đệm.
+        
+      - CAN_Mode: Chế độ CAN:
+     
+            CAN_Mode_Normal: Gửi message thông thường.
+            CAN_Mode_LoopBack: Các message gửi đi sẽ được lưu vào bộ nhớ đệm.
+            CAN_Mode_Silent: Chế độ chỉ nhận.
+            CAN_Mode_Silent_LoopBack: Kết hợp giữa 2 mode trên.
+
+      - CAN_Prescaler: Cài đặt giá trị chia để tạo time quatum.
+        
+            fCan = sysclk/CAN_Prescaler.
+            1tq = 1/fCan.
+        
+      - CAN_SJW: Thời gian trễ phần cứng, tính theo tq.
+
+      - CAN_BS1: Thời gian đồng bộ đầu frame truyền, tính theo tq.
+     
+      - CAN_BS2: Thời gian đồng bộ cuối frame truyền, tính theo tq.
+
+  B4: Cấu hình bộ Filter & mask cho CAN:
+
+    	CAN_FilterInitTypeDef CAN_FilterInitStruct;
+	
+    	CAN_FilterInitStruct.CAN_FilterNumber = 0;
+    	CAN_FilterInitStruct.CAN_FilterMode = CAN_FilterMode_IdMask;
+    	CAN_FilterInitStruct.CAN_FilterScale = CAN_FilterScale_32bit;
+    	CAN_FilterInitStruct.CAN_FilterMaskIdHigh = 0xFFE0;
+    	CAN_FilterInitStruct.CAN_FilterMaskIdLow = 0x0000;
+    	
+    	CAN_FilterInitStruct.CAN_FilterIdHigh = 0x123 << 5;
+    	CAN_FilterInitStruct.CAN_FilterIdLow = 0x0000;
+    	CAN_FilterInitStruct.CAN_FilterFIFOAssignment = CAN_FilterFIFO0;
+    	CAN_FilterInitStruct.CAN_FilterActivation = ENABLE;
+    	
+    	CAN_FilterInit(&CAN_FilterInitStruct);
+
+    + Giải thích các thông số:
+
+      - CAN_FilterNumber: Chọn bộ lọc để dùng, từ 0-13.
+     
+      - CAN_FilterMode: Chế độ bộ lọc:
+        
+            IdMask: Sử dụng mặt nạ bit để lọc ID.
+            IdList: Không sử dụng mặt nạ bit.
+        
+      - CAN_FilterScale: Kích thước của bộ lọc, 32 hoặc 16 bit.
+        
+      - CAN_FilterMaskIdHigh & CAN_FilterMaskIdLow: Giá trị cài đặt cho Mask, 32 bits.
+        
+      - CAN_FilterIdHigh & CAN_FilterIdLow:  Giá trị cài đặt cho bộ lọc, 32bits.
+        
+      - CAN_FilterFIFOAssignment: Chọn bộ đệm cần áp dụng bộ lọc.
+        
+      - CAN_FilterActivation: Kích hoạt bộ lọc ID.
+
+
+
+
+
+
+
+
+
 
 </details>
 <details><summary> LESSION: V--Model </summary>
