@@ -1746,7 +1746,7 @@ VD: hàm chính
       	CAN_InitStruct.CAN_Prescaler = 1;
       	CAN_InitStruct.CAN_SJW = 1;
       	CAN_InitStruct.CAN_BS1 = 1;
-      	CAN_InitStruct.CAN_BS2 = 1;
+      	CAN_InitStruct.CAN_BS2 = 1;		//Tốc độ truyền CAN = 1/(SJW+BS1+BS2) 
       	
       	CAN_Init(CAN1, &CAN_InitStruct);
 
@@ -1782,10 +1782,10 @@ VD: hàm chính
      
       - CAN_BS2: Thời gian đồng bộ cuối frame truyền, tính theo tq.
 
-  B4: Cấu hình bộ Filter & mask cho CAN:
+  B4: Cấu hình bộ Filter & mask cho CAN: CAN hỗ trợ bộ lọc ID, giúp các Node có thể lọc ra ID từ các message trên Bus
 
-    	CAN_FilterInitTypeDef CAN_FilterInitStruct;
-	
+  		CAN_FilterInitTypeDef CAN_FilterInitStruct;
+  
     	CAN_FilterInitStruct.CAN_FilterNumber = 0;
     	CAN_FilterInitStruct.CAN_FilterMode = CAN_FilterMode_IdMask;
     	CAN_FilterInitStruct.CAN_FilterScale = CAN_FilterScale_32bit;
@@ -1819,6 +1819,51 @@ VD: hàm chính
       - CAN_FilterActivation: Kích hoạt bộ lọc ID.
 
 
+- Hàm truyền CAN Tx:
+
+  + Để xác định được 1 gói tin, cần có ID, các bit RTR, IDE, DLC và tối đa 8 byte data như bài trước đã đề cập. Các thành phần này được tổ chức trong CanTx/RxMsg.
+    
+  + Hàm truyền: uint8_t CAN_Transmit(CAN_TypeDef* CANx, CanTxMsg* TxMessage):
+    
+	CANx: Bộ CAN cần dùng.
+	TxMessage: Struct CanRxMsg cần truyền
+  + VD
+    
+            CanTxMsg TxMessage;
+	
+	    TxMessage.StdId = 0x123; // 11bit ID voi che do std
+	    TxMessage.ExtId = 0x00;
+	    TxMessage.RTR = CAN_RTR_DATA;
+	    TxMessage.IDE = CAN_ID_STD;
+	    TxMessage.DLC = len;
+		
+	    for (int i = 0; i < len; i++)
+	    {
+	        TxMessage.Data[i] = data[i];
+	    }
+	
+	    CAN_Transmit(CAN1, &TxMessage);
+
+
+
+- Hàm nhận CAN Rx:
+
+  + Để xác định được 1 gói tin, cần có ID, các bit RTR, IDE, DLC và tối đa 8 byte data như bài trước đã đề cập. Các thành phần này được tổ chức trong CanRxMsg struct.
+    
+  + Hàm CAN_MessagePending(CAN_TypeDef* CANx, uint8_t FIFONumber): Trả về số lượng gói tin đang đợi trong FIFO của bộ CAN. Dùng hàm này để kiểm tra xem bộ CAN có đang truyền nhận hay không, nếu FIFO trống thì có thể nhận.
+
+  + Hàm CAN_Receive(CAN_TypeDef* CANx, uint8_t FIFONumber, CanRxMsg* RxMessage): Nhận về 1 gói tin từ bộ CANx, lưu vào RxMessage.
+    
+  + VD
+    
+	    CanRxMsg RxMessage;
+	    while (CAN_MessagePending(CAN1, CAN_FIFO0) <1 );
+	    CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
+		ID = RxMessage.StdId;
+	    for (int i = 0; i < RxMessage.DLC; i++)
+	    {
+	        TestArray[i] = RxMessage.Data[i];
+	    }
 
 
 
