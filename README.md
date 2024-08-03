@@ -1580,7 +1580,10 @@ VD: hàm chính
 
   + MCU có nhiệm vụ truyền và nhận data. Khi truyền thì sẽ ra 2 mức điện áp đối nghịch với nhau (VD: CAN_H là 3v3 thì CAN_L là ~3v3).
 
-  + Khi truyền đi data gì thì MCU cũng nhận về giá trị giống như mà MCU đã truyền đi thông qua bộ so sánh
+  + Khi truyền đi 1 bit thì CAN sẽ biến đổi điện áp giữa 2 chân CAN_H và CAN_L.
+
+  + Khi nhận được thì Can sẽ so sánh tính hiệu trị tuyệt đối giữa 2 chân CAN_H và CAN_L.
+
 
 
 - Giao thức CAN không có đại diện truyền đi bit 0 (0v) hoặc 1 (3v3) như các giao thức khác .
@@ -1616,6 +1619,8 @@ VD: hàm chính
   
           VD: CAN Low speed RECESSIVE (bit 1): CAN_H (3.25V) - CAN_L (1.75) thì sảy ra nhiễu thì giá trị điện áp tăng lên trên cả 2 dây CAN_H (3.5V) - CAN_L (2V) = 1.5 =>  đúng số qui định bit 1 của CAN Low speed.
 
+
+
 - Nguyên tắc hoạt động:
   
   + CAN có nhiều note khác nhau và có ID riêng biệt, mỗi note đều có thể truyền hoặc nhận data.
@@ -1626,6 +1631,8 @@ VD: hàm chính
 
  ![image](https://github.com/user-attachments/assets/6b87e06d-0a3d-419d-b21c-9b7e74cea16d)
 
+
+
 - Giải quyết tranh chấp trên bus CAN:
 
   ![image](https://github.com/user-attachments/assets/02702279-ca99-490e-8381-dd385c8309e8)
@@ -1634,7 +1641,7 @@ VD: hàm chính
 
   + Data Frame và Remote Frame làm việc theo cơ chế phân xử quyền ưu tiên của tín hiệu. Phân xử chỉ theo ID của các note.
  
-  + Bit ID có giá trị 0 sẽ được ưu tiên hơn.
+  + Bit ID có giá trị 0 sẽ được ưu tiên hơn. ID càng nhỏ thì độ ưu tiên càng cao
 
          VD:  Như hình trên có 3 note đang truyền đi các bit ID. Thì nó sẽ phân xử theo cách so sánh các bit ID của các Note với nhau.
     
@@ -1706,6 +1713,14 @@ VD: hàm chính
     - ACK Delimiter : dài 1 bit và luôn là một recesive (bit 1) có nhiệm vụ phân cách trường CRC với trường phía sau.
     
   + Trường kết thúc (End of Frame Field - EOF) : bit thông báo kết thúc một Data Frame hay Remote Frame. Trường này gồm 7 bit Recessive (bit 1).
+
+
+
+- Khi nào dùng Frame tiêu chuẩn và khi nào dùng Frame mở rộng
+
+  		+ Frame tiêu chuẩn dùng khi chỉ cần các tác vụ nhỏ như bật tắt động cơ, công tắc,..
+  	  
+		+ Frame mở rộng dùng khi chỉ cần nhiều tác vụ như bật tắt động cơ, tốc độ động cơ, áp suất ,.. 
 
 ## Lập trình CAN
 
