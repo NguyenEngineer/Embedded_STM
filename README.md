@@ -717,6 +717,11 @@ Trong giao tiếp SPI, chỉ có thể có 1 Master nhưng có thể 1 hoặc nh
 
 
 Chế độ hoạt động: 
+
+Master và Slave phải đồng ý về các giao thức đồng bộ hóa nhất định.
+
+Phase Clock (CPHA) xác định quá trình chuyển đổi trạng thái của xung đồng hồ tức là lên (thấp lên cao) hoặc xuống (cao xuống thấp), tại đó dữ liệu được truyền đi
+ 
 SPI có 4 chế độ hoạt động phụ thuộc vào cực của xung giữ (Clock Polarity – CPOL) và pha (Phase - CPHA). 
 
 CPOL dùng để chỉ trạng thái của chân SCK ở trạng thái nghỉ. Chân SCK giữ ở mức cao khi CPOL=1 hoặc mức thấp khi CPOL=0. 
