@@ -1460,11 +1460,17 @@ Nhiều master có thể được kết nối với một slave hoặc nhiều s
 
 ![image](https://github.com/NguyenEngineer/Embedded_STM/assets/120030797/16dd9910-1180-40af-af1a-7f0f76ca4a0d)
 
-- Tùy vào kiến trúc VDK mà kích thướbộ nhớ Flash có thể lưu được.               VD: STM32F103 có 128/64Kb Flash
+- Tùy vào kiến trúc VDK mà kích thướbộ nhớ Flash có thể lưu được.
+
+		VD: STM32F103 có 128/64Kb Flash
   
-- Flash được chia nhỏ ra thành mỗi PAGE, 1 PAGE có kích thước 1KB.              VD: STM32F103 có 128/64Kb Flash -> thì sẽ có 127 page (0 -> 127)
+- Flash được chia nhỏ ra thành mỗi PAGE, 1 PAGE có kích thước 1KB.
+
+		VD: STM32F103 có 128/64Kb Flash -> thì sẽ có 127 page (0 -> 127)
   
-- 1 Bank gồm nhiều các PAGE.                                                    VD: 1 Bank gồm có 16 Page.
+- 1 Bank gồm nhiều các PAGE.
+
+ 		VD: 1 Bank gồm có 16 Page.
   
 - Flash phải được xóa đặt về 0 trước khi lưu dữ liệu mới
   
@@ -1555,7 +1561,30 @@ VD: hàm chính
       
 ## Bootloader
 
+- Bootloader dùng khi ta muốn update code hoặc firnware từ xa.
 
+  		VD: update code tải file vô ESP32 --> UART --> STM32
+
+- Quá trình bootloader:
+
+	  B1: Lưu code update vào vùng nhớ khác (thông thường địa chỉ là 0x0800 8000)
+	
+	  B2: code chính của ct thường được lưu ở (địa chỉ 0x0800 0000). Tức là mỗi khi reset lại thì vdk nó sẽ tìm vào vùng
+	  nhớ này để chạy trước.
+	
+	  B3: Viết 1 ct ở vùng nhớ chính (địa chỉ 0x0800 0000) để nhảy tới vùng nhớ (địa chỉ là 0x0800 8000) để thực thi code mới update đã lưu.
+
+- Bootloader có 2 loại là bootloader do nhà sản xuất viết (thường được lưu ở vùng đc 0x0000 0000) và do người dùng viết.
+
+	  1 chương trình bình thường khi nạp vào vdk ko phải là bootloader
+
+- Quá trình reset:
+
+  B1: Chương trình sau khi Reset sẽ nhảy vào Reset_Handler() (là hàm khỏi tạo vùng nhớ cho các cấu hình code), mà Reset_Handler() nằm trên Vector Table (bảng chứa các vector ngắt)
+
+  B2: vùng nhớ code được lưu từ địa chỉ 0x0800.0000, khi chúng ta nạp xuống, nó sẽ mặc định nạp chương trình từ địa chỉ MSP - Main Stack Pointer ở địa chỉ 0x0800.0000 và Vector Table bắt đầu từ địa chỉ 0x0800.0004 (Reset_Handler).
+
+  Tức là ta viết ct bootloader và cho vdk nhảy tới đại chỉ chứa bootloader đó.
 
 
 
