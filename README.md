@@ -1580,12 +1580,23 @@ VD: hàm chính
 
 - Quá trình reset:
 
-  B1: Chương trình sau khi Reset sẽ nhảy vào Reset_Handler() (là hàm khỏi tạo vùng nhớ cho các cấu hình code), mà Reset_Handler() nằm trên Vector Table (bảng chứa các vector ngắt)
+  B1: Chương trình sau khi Reset sẽ nhảy vào Reset_Handler() ( là hàm khỏi tạo vùng nhớ cho các cấu hình code), mà Reset_Handler() nằm trên Vector Table (bảng chứa các vector ngắt)
 
   B2: vùng nhớ code được lưu từ địa chỉ 0x0800.0000, khi chúng ta nạp xuống, nó sẽ mặc định nạp chương trình từ địa chỉ MSP - Main Stack Pointer ở địa chỉ 0x0800.0000 và Vector Table bắt đầu từ địa chỉ 0x0800.0004 (Reset_Handler).
 
   Tức là ta viết ct bootloader và cho vdk nhảy tới đại chỉ chứa bootloader đó.
 
+- Quá trình thực hiện bootloader:
+
+  B1: Sau khi Reset thì vi điều khiển nhảy đến Reset_Handler() mặc định ở địa chỉ 0x0800.0000 và nhảy đến hàm Main() của chương trình Boot.
+  
+  B2: Chương trình Boot này nó sẽ lấy địa chỉ của chương trình ứng dụng mà chúng ta muốn nhảy đến.
+  
+  B3: Gọi hàm Bootloader(), hàm này sẽ set thanh ghi SCB_VTOR theo địa chỉ muốn nhảy đến, SCB➔VTOR = Firmware update address.
+  
+  B4: Sau đó gọi hàm Reset memory (nhảy đến Reset_Handler()),
+  
+  B5: Bây giờ Firmware mới bắt đầu chạy và Vi xử lý đã nhận diện Reset_Handler() ở địa chỉ mới nên dù có nhấn nút Reset thì nó vẫn chạy trong Application.
 
 
 </details>
