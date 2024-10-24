@@ -376,6 +376,7 @@ Quá trình thực thi ngắt:
 
       Bật lại bit ngắt và Quay về trạng thái năng lượng ban đầu: Nếu vi điều khiển đã chuyển từ chế độ tiết kiệm năng lượng sang chế độ hoạt động bình thường, nó sẽ quay lại chế độ tiết kiệm năng lượng.
 
+Lưu ý: Thời gian xử lý ngắt rất nhỏ (0.005 us) nên khoảng thời gian xử lý ngắt đến câu lệnh tiếp theo là rất nhanh
 
 Nếu có nhiều ngắt xảy ra thì VDK sẽ dựa vào mức độ ưu tiên ngắt (số càng nhỏ mức ưu tiên càng cao) để thực thi theo thứ tự. 
 
