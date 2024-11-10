@@ -1885,6 +1885,10 @@ VD: hàm chính
       - CAN_FilterScale: Kích thước của bộ lọc, 32 hoặc 16 bit.
         
       - CAN_FilterMaskIdHigh & CAN_FilterMaskIdLow: Giá trị cài đặt cho Mask, 32 bits.
+
+	        Quy tắc của Filter Mask:
+			Bit 1 trong Mask: Bắt buộc phải so sánh bit này (phải giống FilterID mới pass)
+			Bit 0 trong Mask: Bỏ qua bit này (chấp nhận cả 0 và 1)
         
       - CAN_FilterIdHigh & CAN_FilterIdLow:  Giá trị cài đặt cho bộ lọc, 32bits.
         
@@ -1902,15 +1906,17 @@ VD: hàm chính
 	  - ID coming sẽ so sánh với FilterID nếu match thì nó sẽ tiếp tục so sánh với maskID
   
     	  - MaskID cho phép các bit 1 pass qua và lưu data message FIFO0
+  
+    	  - ID coming phải khớp các bit 1 của MaskID mới đc pass.
 
 	VD:
-	    Sẽ chấp nhận:
-		- ID = 0x123 (khớp hoàn toàn)
-		- ID = 0x124 (khớp trong phạm vi mask)
-		- ID = 0x125 (khớp trong phạm vi mask)
-	    Sẽ loại:
-		- ID = 0x223 (bit quan trọng khác với mask)
-		- ID = 0x323 (bit quan trọng khác với mask)
+
+		FilterID: 0001 0010 0000 (0x120)
+		Mask:     0001 0010 0000 (0x120)
+		
+		ID1 = 0001 0010 0000 → MATCH
+		ID2 = 0001 0010 0001 → MATCH (vì bit cuối không quan trọng do Mask = 0)
+		ID3 = 0001 0011 0000 → KHÔNG MATCH (bit quan trọng khác)
      
 	
 
