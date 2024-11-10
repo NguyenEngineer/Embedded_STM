@@ -1613,6 +1613,10 @@ VD: hàm chính
 
 ![image](https://github.com/user-attachments/assets/ea42b3a4-e4c0-4ef8-a24f-990263ad5b68)
 
+- Question PV: 2 res 120k để làm gì?
+
+		TL: Dùng để hấp thụ nhiễu bởi các sóng ánh xạ vì khi truyền các node nhận thì trên đường dây bus đó phải cần 1 res để chống nhiễu, nếu ko thì sẽ bị nhiễu tín hiệu
+
 - Mạng CAN được tạo thành những note khác nhau và trong 1 note bao gồm:
 
       + Một thiết bị hỗ trợ xử lý điện áp trên bus - CAN Transceiver.
@@ -1844,18 +1848,25 @@ VD: hàm chính
       - CAN_BS1: Thời gian đồng bộ đầu frame truyền, tính theo tq.
      
       - CAN_BS2: Thời gian đồng bộ cuối frame truyền, tính theo tq.
+     
+			VD: |SYNC_SEG|BS1(TimeSeg1)|Sample Point|BS2(TimeSeg2)|
+			       1TQ        2TQ                        1TQ
+			     SYNC_SEG (luôn là 1TQ): Dùng để đồng bộ các node trong mạng
+			     TimeSeg1 = CAN_BS1_2TQ: Là phân đoạn trước điểm lấy mẫu, Dùng để bù trừ delay truyền tín hiệu , Cho phép các node khác có thời gian để truyền tín hiệu đến
+			     Sample Point: Là điểm giữa bit time, nơi giá trị bit được đọc Nằm giữa TimeSeg1 và TimeSeg2
+			     TimeSeg2 = CAN_BS2_1TQ: Là phân đoạn sau điểm lấy mẫu
 
   B4: Cấu hình bộ Filter & mask cho CAN: CAN hỗ trợ bộ lọc ID, giúp các Node có thể lọc ra ID từ các message trên Bus
 
-  		CAN_FilterInitTypeDef CAN_FilterInitStruct;
+		CAN_FilterInitTypeDef CAN_FilterInitStruct;
   
     	CAN_FilterInitStruct.CAN_FilterNumber = 0;
     	CAN_FilterInitStruct.CAN_FilterMode = CAN_FilterMode_IdMask;
     	CAN_FilterInitStruct.CAN_FilterScale = CAN_FilterScale_32bit;
-    	CAN_FilterInitStruct.CAN_FilterMaskIdHigh = 0xFFE0;
-    	CAN_FilterInitStruct.CAN_FilterMaskIdLow = 0x0000;
+    	CAN_FilterInitStruct.CAN_FilterMaskIdHigh = 0x123 <<5 ;  // ID sẽ so sánh vs Mask cài sẵn xem có math vs nhau ko
+    	CAN_FilterInitStruct.CAN_FilterMaskIdLow = 0x0000;   // 16 bit đầu trong 32 bit đã setup là HIGH, 16 bit sau là LOW
     	
-    	CAN_FilterInitStruct.CAN_FilterIdHigh = 0x123 << 5;
+    	CAN_FilterInitStruct.CAN_FilterIdHigh = 0x123 << 5;  // ID comein sẽ so sánh vs ID setup cài sẵn xem có math vs nhau ko nếu giống thì ss vs mask
     	CAN_FilterInitStruct.CAN_FilterIdLow = 0x0000;
     	CAN_FilterInitStruct.CAN_FilterFIFOAssignment = CAN_FilterFIFO0;
     	CAN_FilterInitStruct.CAN_FilterActivation = ENABLE;
@@ -1880,6 +1891,28 @@ VD: hàm chính
       - CAN_FilterFIFOAssignment: Chọn bộ đệm cần áp dụng bộ lọc.
         
       - CAN_FilterActivation: Kích hoạt bộ lọc ID.
+
+
+    + Giải thích cách các node CAN match ID khi nhận data:
+
+            ID coming 		| 0 0 0 1 | 0 0 1 0 | 0 0 1 1 |		0x123
+            CAN_FilterIdHigh 	| 0 0 0 1 | 0 0 1 0 | 0 0 1 1 |		0x123
+            FilterMaskIdHigh 	| 0 0 0 1 | 0 0 1 0 | 0 0 1 1 |		0x123
+
+	  - ID coming sẽ so sánh với FilterID nếu match thì nó sẽ tiếp tục so sánh với maskID
+  
+    	  - MaskID cho phép các bit 1 pass qua và lưu data message FIFO0
+
+	VD:
+	    Sẽ chấp nhận:
+		- ID = 0x123 (khớp hoàn toàn)
+		- ID = 0x124 (khớp trong phạm vi mask)
+		- ID = 0x125 (khớp trong phạm vi mask)
+	    Sẽ loại:
+		- ID = 0x223 (bit quan trọng khác với mask)
+		- ID = 0x323 (bit quan trọng khác với mask)
+     
+	
 
 
 - Hàm truyền CAN Tx:
